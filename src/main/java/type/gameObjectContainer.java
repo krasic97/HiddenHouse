@@ -7,19 +7,19 @@ import java.util.Set;
 public class gameObjectContainer extends GameObject{
     private List<GameObject> containerList = new ArrayList<>();
 
-    public gameObjectContainer(short ID) {
+    public gameObjectContainer(short ID, boolean is_container, int where_contained) {
         super(ID, is_container, where_contained);
     }
 
-    public gameObjectContainer(short ID, String objName) {
+    public gameObjectContainer(short ID, String objName, boolean is_container, int where_contained) {
         super(ID,objName, is_container, where_contained);
     }
 
-    public gameObjectContainer(short ID, String objName, int objDescription) {
-        super(ID,objName, objDescription, is_container);
+    public gameObjectContainer(short ID, String objName, int objDescription, boolean is_container, int where_contained) {
+        super(ID,objName, objDescription, is_container, where_contained);
     }
 
-    public gameObjectContainer(short ID, String objName, int objDescription, Set<String> alias) {
+    public gameObjectContainer(short ID, String objName, int objDescription, Set<String> alias, boolean is_container, int where_contained) {
         super(ID,objName, objDescription, alias, is_container, where_contained);
     }
 
