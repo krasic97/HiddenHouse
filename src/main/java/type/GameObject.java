@@ -1,14 +1,13 @@
 package type;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GameObject {
     private short ID;
     private String objName;
     private int objDescription;
-    private Set<String> alias;
+    private List<String> alias;
     private boolean is_container;
     private int where_contained;
     private int roomId;
@@ -43,7 +42,7 @@ public class GameObject {
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
-    public GameObject(short ID, String objName, int objDescription, Set<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
+    public GameObject(short ID, String objName, int objDescription, List<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
         this.ID = ID;
         this.objName = objName;
         this.objDescription = objDescription;
@@ -52,6 +51,9 @@ public class GameObject {
         this.is_container = is_container;
         this.roomId=roomId;
         this.Visible=Visible;
+    }
+    public GameObject(short ID, String objName) {
+
     }
     public GameObject() {
 
@@ -127,39 +129,13 @@ public class GameObject {
         this.Push = Push;
     }
 
-    public Set<String> getAlias(){
+    public List<String> getAlias(){
         return alias;
     }
-    public void setAlias(Set<String> alias){
-        this.alias = alias;
-    }
-    public void setAlias(String[] alias){
-        this.alias = new HashSet<>(Arrays.asList(alias));
+    public void setAlias(String a){
+        alias.add(a);
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + this.ID;
-        return hash;
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final GameObject other = (GameObject) obj;
-        if (this.ID != other.ID) {
-            return false;
-        }
-        return true;
-    }
 }
 

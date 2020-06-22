@@ -9,8 +9,9 @@ public class Room {
     private int description;
     //private String look;
 
-    private final List<Integer> doors = new ArrayList<Integer>(4);
+    private final List<Door> doors = new ArrayList<>(4);
     private final List<GameObject> objects = new ArrayList<>();
+
 
     //Room constructor
     public Room(short id){
@@ -44,16 +45,26 @@ public class Room {
     public List<GameObject> getObjects(){
         return objects;
     }
-    public List<Integer> getDoors() {
+    public List<Door> getDoors() {
+
         return doors;
     }
-    public void addDoor(int door){
-        doors.add(door);
+    public void addDoor(Door door){
+            doors.add(door);
+
+    }
+
+    public void addObject(GameObject g){
+        objects.add(g);
+    }
+    public void removeObject(GameObject g){
+        objects.remove(g);
     }
 
     public void changeRoom(){
         System.out.print("Sei nella " + getName());
     }
+
 
 
     @Override

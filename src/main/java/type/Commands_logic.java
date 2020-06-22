@@ -11,7 +11,6 @@ public class Commands_logic extends Command{
         super();
     }
 
-
     public void setDescription(int description) {
         this.description = description;
     }
