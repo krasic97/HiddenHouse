@@ -1,4 +1,4 @@
-package Parser;
+package Default.Parser;
 
 import java.util.*;
 
@@ -7,7 +7,7 @@ public class Parser {
     private String temp;
     private int action=0;
     private int object_1=0;
-    Deque<String> str = new LinkedList<>();
+    private Queue<String> str = new LinkedList<>();
     public Parser(){
 
     }
@@ -21,13 +21,6 @@ public class Parser {
 
     }
 
-
-    public void setStr(Deque<String> str) {
-        this.str = str;
-    }
-    public Deque<String> getStr() {
-        return str;
-    }
     public void setObject_1(int object_1) {
         this.object_1 = object_1;
     }
@@ -41,7 +34,7 @@ public class Parser {
         return action;
     }
 
-    //rimuove paroli non utili
+    //rimuove parole non utili
     public String removeUselessWord(String fr, List<String> uselessWord){
         ListIterator it = uselessWord.listIterator();
         while(it.hasNext()){
@@ -51,7 +44,7 @@ public class Parser {
         return fr;
     }
     //splitta la frase su " " e restituisce una deque
-    public Deque<String> splitCommand(String fr) {
+    public Queue<String> splitCommand(String fr) {
         String[] arr = fr.split(" ");
         for (String s : arr){
             str.add(s);
@@ -59,8 +52,9 @@ public class Parser {
         return str;
     }
     //restituisce l'id della corrispondente azione
-    public int checkAction(Deque<String> str, Map<String, Integer> alias_action){
-        temp = str.pop();
+    public int checkAction(Queue<String> str, Map<String, Integer> alias_action){
+        //temp = str.pop();
+        temp = str.remove();
         if(alias_action.containsKey(temp)){
             //restituisce l'id della corrispondente azione
             action = alias_action.get(temp);
@@ -68,16 +62,18 @@ public class Parser {
         return action;
     }
     //restituisce l'id del corrispondente oggetto
-    public int checkObject(Deque<String> str, Map<String, Integer> alias_object){
+    public int checkObject(Queue<String> str, Map<String, Integer> alias_object){
         if(!str.isEmpty()) {
-            temp = str.pop();
+            //temp = str.pop();
+            temp = str.remove();
             while (temp != null) {
                 if (alias_object.containsValue(temp)) {
                     //restituisce l'id del corrispondente oggetto
                     object_1 = alias_object.get(temp);
                     temp = null;
                 } else if (!str.isEmpty()) {
-                    temp = temp.concat(" ").concat(str.pop());
+                    //temp = temp.concat(" ").concat(str.pop());
+                    temp = temp.concat(" ").concat(str.remove());
                 } else {
                     object_1= 0;
                     break;
@@ -87,7 +83,18 @@ public class Parser {
       return object_1;
     }
 
+    //TODO
+    //DA FINIRE/RIVEDERE
+    public void parsing(String fr, Map<String, Integer> alias_object, Map<String, Integer> alias_action, List<String> uselessWord){
+        Queue<String> splitted_phrase;
+        int action;
+        fr = removeUselessWord(fr, uselessWord);
+        splitted_phrase = splitCommand(fr);
+        action = checkAction(splitted_phrase, alias_action);
+        if(action!=0){
 
+        }
+    }
 
 
 

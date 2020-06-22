@@ -1,10 +1,11 @@
-package database;
+package Default.database;
 
-import type.Commands_logic;
-import type.Door;
-import type.GameObject;
-import type.Room;
+import Default.type.Commands_logic;
+import Default.type.Door;
+import Default.type.GameObject;
+import Default.type.Room;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.*;
 
@@ -13,14 +14,14 @@ public class Db_Manager {
     public Db_Manager(){
 
     }
-    // JDBC driver name and database URL
+    // JDBC driver name and Default.database URL
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost/hiddenhouse";
 
     //  Database credentials
     private static final String USER = "root";
     private static final String PASS = "27031997";
-    //Connection to database
+    //Connection to Default.database
     private Connection conn = null;
 
     private static final String query1 = "select * from game_logic";
@@ -35,6 +36,7 @@ public class Db_Manager {
             "inner join game_object on rooms.id= game_object.room_id where rooms.id=?";
     private static final String query10 = "select alias_object.alias_name from alias_object " +
             "inner join game_object on alias_object.id = game_object.id where alias_object.id_object =?";
+    private static final String query11 = "select * from useless_words";
 
     public static String getQuery1() {
         return query1;
@@ -66,6 +68,7 @@ public class Db_Manager {
     public static String getQuery10() {
         return query10;
     }
+    public static String getQuery11(){ return query11;}
 
     private Door dr = new Door();
     private Commands_logic cl = new Commands_logic();
@@ -79,8 +82,7 @@ public class Db_Manager {
     private Map<Integer, Door> doors = new HashMap<>();
     private Map<Integer, GameObject> game_object = new HashMap<>();
     private Map<Integer, Room> rooms = new HashMap<>();
-
-
+    private List<String> useless_wrd = new ArrayList<>();
 
 
     public void InitConnection(){
@@ -340,5 +342,22 @@ public class Db_Manager {
         }
 
     }
+    public List<String> getUseless_wrd() throws SQLException {
+        Statement stmt = null;
+        try{
+            stmt = getConn().createStatement();
+            ResultSet rs = stmt.executeQuery(getQuery11());
+            while(rs.next()){
+                useless_wrd.add(rs.getString("word"));
+            }
+        }catch (SQLException throwables){
+            throwables.printStackTrace();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+        return useless_wrd;
+    }
+
 }
 

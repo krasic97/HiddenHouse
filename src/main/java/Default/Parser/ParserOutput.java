@@ -1,4 +1,4 @@
-package Parser;
+package Default.Parser;
 
 public class ParserOutput {
 }
