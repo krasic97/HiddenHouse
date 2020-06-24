@@ -1,13 +1,14 @@
 package Default.type;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class GameObject {
     private short ID;
     private String objName;
-    private int objDescription;
-    private List<String> alias;
+    private String objDescription;
+    private Set<String> alias_name = new HashSet<>();
     private boolean is_container;
     private int where_contained;
     private int roomId;
@@ -35,18 +36,18 @@ public class GameObject {
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
-    public GameObject(short ID, String objName, int objDescription, boolean is_container, int where_contained){
+    public GameObject(short ID, String objName, String objDescription, boolean is_container, int where_contained){
         this.ID = ID;
         this.objName = objName;
         this.objDescription = objDescription;
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
-    public GameObject(short ID, String objName, int objDescription, List<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
+    public GameObject(short ID, String objName, String objDescription, Set<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
         this.ID = ID;
         this.objName = objName;
         this.objDescription = objDescription;
-        this.alias = alias;
+        this.alias_name = alias;
         this.where_contained = where_contained;
         this.is_container = is_container;
         this.roomId=roomId;
@@ -60,16 +61,25 @@ public class GameObject {
     }
 
 
+    public void addAlias(String a){
+        alias_name.add(a);
+    }
+    public short getID() {
+        return ID;
+    }
+    public void setID(short ID) {
+        this.ID = ID;
+    }
     public String getObjName(){
         return objName;
     }
     public void setObjName(String objName){
         this.objName = objName;
     }
-    public int getObjDescription(){
+    public String getObjDescription(){
         return objDescription;
     }
-    public void setObjDescription(int objDescription){
+    public void setObjDescription(String objDescription){
         this.objDescription = objDescription;
     }
     public int getRoomId() {
@@ -129,12 +139,10 @@ public class GameObject {
         this.Push = Push;
     }
 
-    public List<String> getAlias(){
-        return alias;
+    public Set<String> getAlias(){
+        return alias_name;
     }
-    public void setAlias(String a){
-        alias.add(a);
-    }
+
 
 
 }

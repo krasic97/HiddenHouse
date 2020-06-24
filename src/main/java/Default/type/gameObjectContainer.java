@@ -16,10 +16,10 @@ public class gameObjectContainer extends GameObject{
     public gameObjectContainer(short ID, String objName, int objDescription, Set<String> alias, boolean is_container, int where_contained) {
         super(ID, objName, objDescription, alias, is_container, where_contained);
     }
-    public gameObjectContainer(short ID, String objName, int objDescription, boolean is_container, int where_contained) {
+    public gameObjectContainer(short ID, String objName, String objDescription, boolean is_container, int where_contained) {
         super(ID, objName, objDescription, is_container, where_contained);
     }
-    public gameObjectContainer(short ID, String objName, int objDescription, Set<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible) {
+    public gameObjectContainer(short ID, String objName, String objDescription, Set<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible) {
         super(ID, objName, objDescription, alias, is_container, where_contained, roomId, Visible);
     }
     public gameObjectContainer(short ID, String objName) {

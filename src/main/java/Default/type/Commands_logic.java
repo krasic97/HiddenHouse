@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Commands_logic extends Command{
-    private int description;
-    private List<Command> CommandsLogicList = new ArrayList<>(3);
+    private String description;
+    private List<String> CommandsLogicList = new ArrayList<>(3);
 
     public Commands_logic() {
         super();
     }
 
-    public void setDescription(int description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public int getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public List<Command> getCommandsLogicList() {
+    public List<String> getCommandsLogicList() {
         return CommandsLogicList;
     }
 
-    public void setCommandsLogicList(List<Command> commandsLogicList) {
+    public void setCommandsLogicList(List<String> commandsLogicList) {
         CommandsLogicList = commandsLogicList;
 
     }
 
-    public void addCommList(Command command){
+    public void addCommList(String command){
         CommandsLogicList.add(command);
     }
 

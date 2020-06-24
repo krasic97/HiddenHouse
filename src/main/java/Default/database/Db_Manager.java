@@ -1,9 +1,6 @@
 package Default.database;
 
-import Default.type.Commands_logic;
-import Default.type.Door;
-import Default.type.GameObject;
-import Default.type.Room;
+import Default.type.*;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
@@ -24,6 +21,21 @@ public class Db_Manager {
     //Connection to Default.database
     private Connection conn = null;
 
+    private Door dr = new Door();
+    private Commands_logic cl = new Commands_logic();
+    private GameObject go = new GameObject();
+    private Room rm = new Room();
+    private Alias als = new Alias();
+    private Map<Integer, Commands_logic> logic = new HashMap<>();
+    private Map<Integer, String > descr = new HashMap<>();
+    private List<Alias> alias_action = new ArrayList<>();
+    private List<Alias> alias_object = new ArrayList<>();
+    private Map<Integer, String> primitive_commands = new HashMap<>();
+    private Map<Integer, Door> doors = new HashMap<>();
+    private Map<Integer, GameObject> game_object = new HashMap<>();
+    private Map<Integer, Room> rooms = new HashMap<>();
+    private List<String> useless_wrd = new ArrayList<>();
+
     private static final String query1 = "select * from game_logic";
     private static final String query2 = "select * from description";
     private static final String query3 = "select * from action_alias";
@@ -35,8 +47,10 @@ public class Db_Manager {
     private static final String query9 = "select game_object.id from rooms " +
             "inner join game_object on rooms.id= game_object.room_id where rooms.id=?";
     private static final String query10 = "select alias_object.alias_name from alias_object " +
-            "inner join game_object on alias_object.id = game_object.id where alias_object.id_object =?";
+            "inner join game_object on alias_object.id_object = game_object.id where game_object.id =?";
     private static final String query11 = "select * from useless_words";
+    private static final String query12 = "select description.descr from rooms inner join description on " +
+            "rooms.description=description.id where rooms.id = ?;";
 
     public static String getQuery1() {
         return query1;
@@ -70,21 +84,6 @@ public class Db_Manager {
     }
     public static String getQuery11(){ return query11;}
 
-    private Door dr = new Door();
-    private Commands_logic cl = new Commands_logic();
-    private GameObject go = new GameObject();
-    private Room rm = new Room();
-    private Map<Integer, Commands_logic> logic = new HashMap<>();
-    private Map<Integer, String > descr = new HashMap<>();
-    private Map<String, Integer> alias_action = new HashMap<>();
-    private Map<String, Integer> alias_object = new HashMap<>();
-    private Map<Integer, String> primitive_commands = new HashMap<>();
-    private Map<Integer, Door> doors = new HashMap<>();
-    private Map<Integer, GameObject> game_object = new HashMap<>();
-    private Map<Integer, Room> rooms = new HashMap<>();
-    private List<String> useless_wrd = new ArrayList<>();
-
-
     public void InitConnection(){
         try{
             Class.forName(JDBC_DRIVER);
@@ -96,19 +95,23 @@ public class Db_Manager {
             throwables.printStackTrace();
         }
     }
+
+    //Per il caricamento completo degli oggetti
     public Map loadGame_Object() throws SQLException {
+        descr=loadDescription();
         Statement stmt = null;
         try {
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery7());
             while (rs.next()) {
                 go = new GameObject();
+                go.setID((short) rs.getInt("id"));
                 go.setObjName(rs.getString("name"));
                 go.setRoomId(rs.getInt("room_id"));
                 go.setOpenable(rs.getBoolean("openable"));
                 go.setPushable(rs.getBoolean("pushable"));
                 go.setPickable(rs.getBoolean("pickable"));
-                go.setObjDescription(rs.getInt("description"));
+                go.setObjDescription(descr.get(rs.getInt("description")));
                 go.setVisible(rs.getBoolean("visible"));
                 go.setIs_container(rs.getBoolean("is_container"));
                 go.setWhere_contained(rs.getInt("where_contained"));
@@ -122,8 +125,29 @@ public class Db_Manager {
             if (stmt != null)
                 stmt.close();
         }
+        insertAliasObject();
         return game_object;
     }
+    public void insertAliasObject() throws SQLException {
+        PreparedStatement stmt;
+        ResultSet rs;
+        stmt = getConn().prepareStatement(getQuery10());
+        try {
+            for (int i = 1; i < game_object.size(); i++) {
+                stmt.setInt(1, i);
+                rs = stmt.executeQuery();
+                while (rs.next()) {
+                    game_object.get(i).addAlias(rs.getString("alias_name"));
+                }
+            }
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
     public Map loadDescription() throws SQLException {
         Statement stmt = null;
         try{
@@ -144,19 +168,21 @@ public class Db_Manager {
         }
         return descr;
     }
+
+    //per caricare la logica
     public Map loadLogic() throws SQLException {
 
+        descr=loadDescription();
         Statement stmt = null;
-
         try {
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery1());
             while (rs.next()) {
                 cl = new Commands_logic();
-                cl.setAction(rs.getString("action"));
-                cl.setObject_1(rs.getString("object_1"));
-                cl.setObject_2(rs.getString("object_2"));
-                cl.setDescription(rs.getInt("descr"));
+                cl.addCommList(rs.getString("action"));
+                cl.addCommList(rs.getString("object_1"));
+                cl.addCommList(rs.getString("object_2"));
+                cl.setDescription(descr.get(rs.getInt("descr")));
                 logic.put(rs.getInt("id"), cl );;
             }
             rs.close();
@@ -170,41 +196,37 @@ public class Db_Manager {
         }
         return logic;
     }
-    public Map loadAliasAction(){
+
+    //Per caricare gli alias da passare al metodo parsing
+    public List<Alias> loadAliasAction(){
         Statement stmt = null;
 
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery3());
             while(rs.next()){
-                /*List<Object> ls;
-                alias_action.put(rs.getInt("id"), ls = new LinkedList<>() );
-                ls.add(rs.getString("alias"));
-                ls.add(rs.getInt("id_action"));
-                 */
-
-                alias_action.put(rs.getString("alias"), rs.getInt("id_action"));
+                als = new Alias();
+                als.setName(rs.getString("alias"));
+                als.setId_refer(rs.getInt("id_action"));
+                alias_action.add(als);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return alias_action;
     }
-    public Map loadAliasObject(){
+    public List<Alias> loadAliasObject(){
         Statement stmt = null;
 
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery4());
             while(rs.next()){
-                alias_object.put(rs.getString("alias_name"), rs.getInt("id_object"));
-                /*
-                List<Object> ls;
-                alias_object.put(rs.getInt("id"), ls = new LinkedList<>());
-                ls.add(rs.getString("alias_name"));
-                ls.add(game_object.get(rs.getInt("id_object")));
-                //ls.add(rs.getInt("id_object"));
-                 */
+                als = new Alias();
+                als.setName(rs.getString("alias_name"));
+                als.setId_refer(rs.getInt("id_object"));
+                alias_object.add(als);
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -212,6 +234,8 @@ public class Db_Manager {
         return alias_object;
 
     }
+
+    //per caricare i comandi primitivi(azioni)
     public Map loadPrimitiveCommands() throws SQLException {
         Statement stmt = null;
         try{
@@ -233,7 +257,11 @@ public class Db_Manager {
         return primitive_commands;
 
     }
+
+    //Per il caricamento completo delle porte
     public Map loadDoors() throws SQLException {
+
+        descr=loadDescription();
         Statement stmt = null;
 
         try {
@@ -245,8 +273,8 @@ public class Db_Manager {
                 dr.setPrevious_Room(rs.getInt("pre_room"));
                 dr.setNext_Room(rs.getInt("next_room"));
                 dr.setLocked(rs.getBoolean("is_locked"));
-                dr.setDescription(rs.getInt("descr"));
-                dr.setLock_Description(rs.getInt("lock_descr"));
+                dr.setDescription(descr.get(rs.getInt("descr")));
+                dr.setLock_Description(descr.get(rs.getInt("lock_descr")));
                 doors.put(rs.getInt("id"), dr );;
             }
             rs.close();
@@ -261,22 +289,25 @@ public class Db_Manager {
 
         return doors;
     }
-    public Map loadRooms() throws SQLException {
-        Statement stmt = null;
 
+
+    //Per il caricamento completo di Rooms
+    public Map loadRooms() throws SQLException {
+        descr=loadDescription();
+        doors=loadDoors();
+        Statement stmt = null;
         try {
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery8());
             while (rs.next()) {
                 rm = new Room();
                 rm.setName(rs.getString("name"));
-                rm.setDescription(rs.getInt("description"));
+                rm.setDescription(descr.get(rs.getInt("description")));
                 rm.addDoor(doors.get(rs.getInt("north")));
                 rm.addDoor(doors.get(rs.getInt("east")));
                 rm.addDoor(doors.get(rs.getInt("south")));
                 rm.addDoor(doors.get(rs.getInt("west")));
-
-                rooms.put(rs.getInt("id"), rm);
+                rooms.put(rs.getInt("rooms.id"), rm);
             }
             rs.close();
             stmt.close();
@@ -286,11 +317,14 @@ public class Db_Manager {
             if (stmt != null)
                 stmt.close();
         }
+
         //metodo per aggiungere oggetti alla stanza
         loadRoomObj();
         return rooms;
     }
     public void loadRoomObj() throws SQLException {
+        game_object = loadGame_Object();
+
         PreparedStatement stmt;
         ResultSet rs;
         stmt = getConn().prepareStatement(getQuery9());
@@ -310,26 +344,8 @@ public class Db_Manager {
                 stmt.close();
         }
     }
-    public void insertAliasObject() throws SQLException {
-        PreparedStatement stmt;
-        ResultSet rs;
-        stmt = getConn().prepareStatement(getQuery10());
-        try {
-            for (int i = 1; i < game_object.size(); i++) {
-                stmt.setInt(1, i);
-                rs = stmt.executeQuery();
-                while (rs.next()) {
-                    //TODO caricamento alias nella lista
-                    game_object.get(i).setAlias(rs.getString("alias_name"));
-                }
-            }
-        }catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally {
-            if (stmt != null)
-                stmt.close();
-        }
-    }
+
+
     public Connection getConn(){
         return conn;
     }
@@ -342,7 +358,9 @@ public class Db_Manager {
         }
 
     }
-    public List<String> getUseless_wrd() throws SQLException {
+
+    //per caricare le parole inutili da rimuovere dalla stringa grezza
+    public List<String> loadUseless_wrd() throws SQLException {
         Statement stmt = null;
         try{
             stmt = getConn().createStatement();

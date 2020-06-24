@@ -6,7 +6,7 @@ import java.util.List;
 public class Room {
     private  short id;
     private String name;
-    private int description;
+    private String description;
     //private String look;
 
     private List<Door> doors = new ArrayList<>(4);
@@ -19,7 +19,7 @@ public class Room {
     }
 
     //Room constructor
-    public Room(short id, String name, int description){
+    public Room(short id, String name, String description){
         this.id = id;
         this.name = name;
         this.description = description;
@@ -36,10 +36,10 @@ public class Room {
     public void setName(String name){
         this.name = name;
     }
-    public int getDescription(){
+    public String getDescription(){
         return this.description;
     }
-    public void setDescription(int description){
+    public void setDescription(String description){
         this.description = description;
     }
     public List<GameObject> getObjects(){
@@ -54,16 +54,16 @@ public class Room {
 
     }
 
-    public void addObject(GameObject g){
-        objects.add(g);
+    public void addAllObject(List<GameObject> g){
+        objects.addAll(g);
+    }
+    public void addObject(GameObject go){
+        objects.add(go);
     }
     public void removeObject(GameObject g){
         objects.remove(g);
     }
 
-    public void changeRoom(){
-        System.out.print("Sei nella " + getName());
-    }
 
 
 

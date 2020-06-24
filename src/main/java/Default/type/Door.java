@@ -7,10 +7,10 @@ public class Door {
     private int Previous_Room;
     private int Next_Room;
     private boolean isLocked;
-    private int Description;
-    private int Lock_Description;
+    private String Description;
+    private String Lock_Description;
 
-    public Door(int id, String name, int previous_room, int next_room, int description, int lock_description){
+    public Door(int id, String name, int previous_room, int next_room, String description, String lock_description){
         this.id=id;
         this.name = name;
         this.Previous_Room = previous_room;
@@ -48,16 +48,16 @@ public class Door {
     public void setNext_Room(int next_Room) {
         Next_Room = next_Room;
     }
-    public int getDescription() {
+    public String getDescription() {
         return Description;
     }
-    public void setDescription(int description) {
+    public void setDescription(String description) {
         Description = description;
     }
-    public int getLock_Description() {
+    public String getLock_Description() {
         return Lock_Description;
     }
-    public void setLock_Description(int lock_Description) {
+    public void setLock_Description(String lock_Description) {
         Lock_Description = lock_Description;
     }
     public boolean isLocked() {
@@ -68,11 +68,11 @@ public class Door {
     }
 
 
-    public int getRequestDescr(boolean isLocked) {
+    public String getRequestDescr(boolean isLocked) {
         if (isLocked) {
                 return getLock_Description();
-        } else if (getDescription() != 0) {
-            return 0;
+        } else if (getDescription() != null) {
+            return null;
         } else {
             return getDescription();
         }
