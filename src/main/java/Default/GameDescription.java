@@ -84,7 +84,7 @@ public abstract class GameDescription {
     }
     
     public abstract void init() throws Exception;
-    public abstract void nextMove(ArrayList<String> command_move, PrintStream out);
+    public abstract void nextMove(Commands_logic command_move, PrintStream out);
 
 
 

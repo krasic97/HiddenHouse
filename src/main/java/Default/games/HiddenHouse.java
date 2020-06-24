@@ -32,15 +32,14 @@ public class HiddenHouse extends GameDescription {
         getPrimitive_commands().putAll(db.loadPrimitiveCommands());
         getAlias_action().addAll(db.loadAliasAction());
         getAlias_object().addAll(db.loadAliasObject());
-
-
+        
         setCurrentRoom(getRooms().get(0));
         setUselessword(db.loadUseless_wrd());
         db.CloseConnection();
     }
 
     @Override
-    public void nextMove(ArrayList<String> command_move, PrintStream out) {
+    public void nextMove(Commands_logic command_move, PrintStream out) {
         int index=0;
         while(index<getLogic().size()){
             if(getLogic().get(index).getCommandsLogicList().equals(command_move)){

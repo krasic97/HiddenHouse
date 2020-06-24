@@ -2,6 +2,7 @@ package Default.Parser;
 
 import Default.type.Alias;
 import Default.type.Command;
+import Default.type.Commands_logic;
 import Default.type.GameObject;
 
 import java.lang.reflect.Array;
@@ -88,38 +89,46 @@ public class Parser {
 
     //restituisce un ArrayList<String> che contiene un comando completo e utilizzabile dal codice
     //ad es. usa cristallo arancione radio----> USE ORANGE_CRYSTAL RADIO
-    public ArrayList<String> parsing(String fr, List<Alias> alias_object, List<Alias> alias_action,
-                        List<String> uselessWord, Map<Integer, String> primitive_commands,
-                                     Map<Integer, GameObject> game_obj){
+    public Commands_logic parsing(String fr, List<Alias> alias_object, List<Alias> alias_action,
+                                  List<String> uselessWord, Map<Integer, String> primitive_commands,
+                                  Map<Integer, GameObject> game_obj){
         Queue<String> splitted_phrase;
         int action;
         int obj_1;
         int obj_2;
-        ArrayList<String> concrete_cmd = new ArrayList<>(3);
+        //ArrayList<String> concrete_cmd = new ArrayList<>(3);
+        Commands_logic concrete_cmd = new Commands_logic();
 
         fr = removeUselessWord(fr, uselessWord);
         splitted_phrase = splitCommand(fr);
         action = checkAction(splitted_phrase, alias_action);
 
         if(action!=0){
-            concrete_cmd.add(primitive_commands.get(action));
-            obj_1=checkObject(splitted_phrase, alias_object);
+            //concrete_cmd.add(primitive_commands.get(action));
+            concrete_cmd.setAction(primitive_commands.get(action));
+            obj_1 = checkObject(splitted_phrase, alias_object);
             if(obj_1!=0){
-
-                concrete_cmd.add(game_obj.get(obj_1).getObjName());
+                //concrete_cmd.add(game_obj.get(obj_1).getObjName());
+                concrete_cmd.setObject_1(game_obj.get(obj_1));
             }else{
-                concrete_cmd.add(null);
+                //concrete_cmd.add(null);
+                concrete_cmd.setObject_1(null);
             }
-            obj_2= checkObject(splitted_phrase,alias_object);
+            obj_2 = checkObject(splitted_phrase,alias_object);
             if (obj_2!=0){
-                concrete_cmd.add(game_obj.get(obj_2).getObjName());
+                //concrete_cmd.add(game_obj.get(obj_2).getObjName());
+                concrete_cmd.setObject_2(game_obj.get(obj_2));
             }else{
-                concrete_cmd.add(null);
+                //concrete_cmd.add(null);
+                concrete_cmd.setObject_2(null);
             }
         }else{
-            concrete_cmd.add(null);
-            concrete_cmd.add(null);
-            concrete_cmd.add(null);
+            //concrete_cmd.add(null);
+            concrete_cmd.setAction(null);
+            //concrete_cmd.add(null);
+            concrete_cmd.setObject_1(null);
+            //concrete_cmd.add(null);
+            concrete_cmd.setObject_2(null);
         }
         return concrete_cmd;
     }
