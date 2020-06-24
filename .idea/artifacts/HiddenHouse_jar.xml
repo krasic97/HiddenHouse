@@ -2,8 +2,12 @@
   <artifact type="jar" name="HiddenHouse:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/HiddenHouse_jar</output-path>
     <root id="archive" name="HiddenHouse.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/j/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="HiddenHouse" />
       <element id="extracted-dir" path="$PROJECT_DIR$/mysql-connector-java-8.0.19.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/j/META-INF" />
     </root>
   </artifact>
 </component>
