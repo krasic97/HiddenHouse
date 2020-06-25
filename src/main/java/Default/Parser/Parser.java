@@ -1,11 +1,9 @@
 package Default.Parser;
 
 import Default.type.Alias;
-import Default.type.Command;
 import Default.type.Commands_logic;
 import Default.type.GameObject;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Parser {
@@ -54,8 +52,10 @@ public class Parser {
         for (Alias alias : alias_action) {
             t_alias.add(alias.getName());
         }
+
         temp = str.remove();
         if(t_alias.contains(temp)){
+        //if(t_alias.indexOf(temp)!=-1){
             action = alias_action.get(t_alias.indexOf(temp)).getId_refer();
         }
         return action;
@@ -90,7 +90,7 @@ public class Parser {
     //restituisce un ArrayList<String> che contiene un comando completo e utilizzabile dal codice
     //ad es. usa cristallo arancione radio----> USE ORANGE_CRYSTAL RADIO
     public Commands_logic parsing(String fr, List<Alias> alias_object, List<Alias> alias_action,
-                                  List<String> uselessWord, Map<Integer, String> primitive_commands,
+                                  List<String> uselessWord, Map<Integer,String> actions,
                                   Map<Integer, GameObject> game_obj){
         Queue<String> splitted_phrase;
         int action;
@@ -105,7 +105,7 @@ public class Parser {
 
         if(action!=0){
             //concrete_cmd.add(primitive_commands.get(action));
-            concrete_cmd.setAction(primitive_commands.get(action));
+            concrete_cmd.setAction(actions.get(action));
             obj_1 = checkObject(splitted_phrase, alias_object);
             if(obj_1!=0){
                 //concrete_cmd.add(game_obj.get(obj_1).getObjName());
