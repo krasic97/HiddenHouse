@@ -20,35 +20,38 @@ public abstract class GameDescription {
     private List<Commands_logic> logic = new ArrayList<>();
     private List<Alias> alias_action = new ArrayList<>();
     private List<Alias> alias_object = new ArrayList<>();
-    private Map<Integer, String> primitive_commands = new HashMap<>();
+    private Map<Integer, String> actions = new HashMap<>();
     //da sostituire con una List<GameObject>
     private Map<Integer, GameObject> game_obj = new HashMap<>();
     private Map<Integer, String> descriptions = new HashMap<>();
     private List<String> uselessword = new ArrayList<>();
     private Room currentRoom;
-    private Object GameDescription;
 
     public GameDescription getGameDescription(){
-        return this.game;
+        return game;
     }
+
+    public void setGame(GameDescription game) {
+        this.game = game;
+    }
+
     public void setDescriptions(Map<Integer, String> descriptions) {
         this.descriptions = descriptions;
     }
     public Map<Integer, String> getDescriptions() {
         return descriptions;
     }
-
     public List<Alias> getAlias_action() {
         return alias_action;
     }
     public void setAlias_action(List<Alias> alias_action) {
         this.alias_action = alias_action;
     }
-    public Map<Integer, String> getPrimitive_commands() {
-        return primitive_commands;
+    public Map<Integer, String> getActions() {
+        return actions;
     }
-    public void setPrimitive_commands(Map<Integer, String> primitive_commands) {
-        this.primitive_commands = primitive_commands;
+    public void setActions(Map<Integer,String> actions) {
+        this.actions = actions;
     }
     public Map<Integer, GameObject> getGame_obj() {
         return game_obj;

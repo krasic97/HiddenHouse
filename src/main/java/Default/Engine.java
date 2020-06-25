@@ -23,7 +23,7 @@ public class Engine {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     private final GameDescription game;
-    private final Parser parser;
+    private  Parser parser;
 
     public Engine(GameDescription game){
         this.game= game;
@@ -36,6 +36,8 @@ public class Engine {
     }
 
     public void run(){
+        //restituisce a interpret(...) l'istanza corrente di GameDescription
+        game.setGame(game);
         System.out.println(ANSI_RED + "Sei nella " + game.getCurrentRoom().getName()+ "." + ANSI_RESET);
         System.out.println("================================================");
         System.out.println(ANSI_BLUE + game.getCurrentRoom().getDescription() + ANSI_RESET);
@@ -43,15 +45,16 @@ public class Engine {
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
             Commands_logic command_move = parser.parsing(input, game.getAlias_object(), game.getAlias_action(),
-                    game.getUselessword(), game.getPrimitive_commands(), game.getGame_obj());
-
-            if (command_move!= null && command_move.getAction()==game.getPrimitive_commands().get(1)){
+                    game.getUselessword(), game.getActions(), game.getGame_obj());
+            if (command_move!= null && command_move.getAction()==game.getActions().get(1)){
                 System.out.println(ANSI_RED + "Addio!" + ANSI_RESET);
                 break;
             }else{
                 game.nextMove(command_move, System.out);
                 System.out.println("================================================");
             }
+            //deve essere inizializzato un nuovo parser ad ogni iterata per il corretto funzionamento del metodo parsing
+            parser = new Parser();
         }
     }
 

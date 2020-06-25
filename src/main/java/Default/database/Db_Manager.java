@@ -1,8 +1,11 @@
+
 package Default.database;
 
+import Default.GameDescription;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.*;
 import Default.type.*;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.*;
 
@@ -30,9 +33,12 @@ public class Db_Manager {
     private Map<Integer, String > descr = new HashMap<>();
     private List<Alias> alias_action = new ArrayList<>();
     private List<Alias> alias_object = new ArrayList<>();
-    private Map<Integer, String> primitive_commands = new HashMap<>();
+    private Map<Integer,String> actions = new HashMap<>();
     private Map<Integer, Door> doors = new HashMap<>();
     private Map<Integer, GameObject> game_object = new HashMap<>();
+    //private BidiMap<Integer, GameObject> game_object = new DualHashBidiMap<>();
+
+
     private Map<Integer, Room> rooms = new HashMap<>();
     private List<String> useless_wrd = new ArrayList<>();
 
@@ -97,7 +103,7 @@ public class Db_Manager {
     }
 
     //Per il caricamento completo degli oggetti
-    public Map loadGame_Object() throws SQLException {
+    public Map<Integer, GameObject> loadGame_Object() throws SQLException {
         descr=loadDescription();
         Statement stmt = null;
         try {
@@ -171,7 +177,7 @@ public class Db_Manager {
 
     //per caricare la logica
     public Map loadLogic() throws SQLException {
-
+        game_object=loadGame_Object();
         descr=loadDescription();
         Statement stmt = null;
         try {
@@ -179,15 +185,14 @@ public class Db_Manager {
             ResultSet rs = stmt.executeQuery(getQuery1());
             while (rs.next()) {
                 cl = new Commands_logic();
-                cl.addCommList(rs.getString("action"));
-                cl.addCommList(rs.getString("object_1"));
-                cl.addCommList(rs.getString("object_2"));
+                cl.setAction(rs.getString("action"));
+                cl.setObject_1FromName(rs.getString("object_1"), game_object);
+                cl.setObject_2FromName(rs.getString("object_2"), game_object);
                 cl.setDescription(descr.get(rs.getInt("descr")));
                 logic.put(rs.getInt("id"), cl );;
             }
             rs.close();
             stmt.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
@@ -236,14 +241,15 @@ public class Db_Manager {
     }
 
     //per caricare i comandi primitivi(azioni)
-    public Map loadPrimitiveCommands() throws SQLException {
+    public Map<Integer, String> loadActions() throws SQLException {
         Statement stmt = null;
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery5());
 
             while(rs.next()){
-                primitive_commands.put(rs.getInt("id"), rs.getString("action"));
+                actions.put(rs.getInt("id"), rs.getString("action"));
+                //actions.add(rs.getString("action"));
             }
             rs.close();
             stmt.close();
@@ -254,7 +260,7 @@ public class Db_Manager {
             if (stmt != null)
                 stmt.close();
         }
-        return primitive_commands;
+        return actions;
 
     }
 
