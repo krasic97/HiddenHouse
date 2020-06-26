@@ -1,13 +1,12 @@
 package Default.type;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GameObject {
     private short ID;
     private String objName;
     private String objDescription;
-    private Set<String> alias_name = new HashSet<>();
+    private List<String> alias_name = new ArrayList<>();
     private boolean is_container;
     private int where_contained;
     private int roomId;
@@ -42,7 +41,7 @@ public class GameObject {
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
-    public GameObject(short ID, String objName, String objDescription, Set<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
+    public GameObject(short ID, String objName, String objDescription, List<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
         this.ID = ID;
         this.objName = objName;
         this.objDescription = objDescription;
@@ -138,11 +137,33 @@ public class GameObject {
         this.Push = Push;
     }
 
-    public Set<String> getAlias(){
+    public List<String> getAlias(){
         return alias_name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameObject that = (GameObject) o;
+        return ID == that.ID &&
+                is_container == that.is_container &&
+                where_contained == that.where_contained &&
+                roomId == that.roomId &&
+                Visible == that.Visible &&
+                Openable == that.Openable &&
+                Pickable == that.Pickable &&
+                Pushable == that.Pushable &&
+                Open == that.Open &&
+                Push == that.Push &&
+                Objects.equals(objName, that.objName) &&
+                Objects.equals(objDescription, that.objDescription) &&
+                Objects.equals(alias_name, that.alias_name);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID, objName, objDescription, alias_name, is_container, where_contained, roomId, Visible, Openable, Pickable, Pushable, Open, Push);
+    }
 }
 

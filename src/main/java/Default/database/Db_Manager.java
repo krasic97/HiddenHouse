@@ -57,6 +57,7 @@ public class Db_Manager {
     private static final String query11 = "select * from useless_words";
     private static final String query12 = "select description.descr from rooms inner join description on " +
             "rooms.description=description.id where rooms.id = ?;";
+    private static final String query13="select id from game_object where where_contained= ?";
 
     public static String getQuery1() {
         return query1;
@@ -89,6 +90,9 @@ public class Db_Manager {
         return query10;
     }
     public static String getQuery11(){ return query11;}
+    public static String getQuery13() {
+        return query13;
+    }
 
     public void InitConnection(){
         try{
@@ -331,16 +335,36 @@ public class Db_Manager {
     public void loadRoomObj() throws SQLException {
         game_object = loadGame_Object();
 
-        PreparedStatement stmt;
-        ResultSet rs;
+        PreparedStatement stmt,stmt2;
+        ResultSet rs,rs2;
         stmt = getConn().prepareStatement(getQuery9());
+        stmt2 = getConn().prepareStatement(getQuery13());
+
+
 
         try{
             for (int i=1; i < rooms.size(); i++) {
                 stmt.setInt(1, i);
                 rs = stmt.executeQuery();
                 while(rs.next()){
-                    rooms.get(i).addObject(game_object.get(rs.getInt("id")));
+
+                    if(game_object.get(rs.getInt("id")).isIs_container()){
+                        gameObjectContainer container;
+                        container = (gameObjectContainer) game_object.get(rs.getInt("id"));
+                        for(int j=1; j<game_object.size(); j++){
+                            stmt2.setInt(1,j);
+                            rs2=stmt2.executeQuery();
+                            while(rs2.next()){
+
+                                container.addContList(game_object.get(rs2.getInt("id")));
+                            }
+                        }
+                        rooms.get(i).addObject(container);
+
+                    }else {
+                        rooms.get(i).addObject( game_object.get(rs.getInt("id")));
+                    }
+
                 }
             }
         } catch (SQLException throwables) {

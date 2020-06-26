@@ -46,7 +46,7 @@ public class Engine {
             String input = scanner.nextLine();
             Commands_logic command_move = parser.parsing(input, game.getAlias_object(), game.getAlias_action(),
                     game.getUselessword(), game.getActions(), game.getGame_obj());
-            if (command_move!= null && command_move.getAction()==game.getActions().get(1)){
+            if (command_move!= null && command_move.getAction()==game.getActions().get(1)){ //action: END
                 System.out.println(ANSI_RED + "Addio!" + ANSI_RESET);
                 break;
             }else{
@@ -59,8 +59,21 @@ public class Engine {
     }
 
     public static void main(String[] args) throws SQLException {
+
         Engine engine = new Engine(new HiddenHouse());
         System.out.println(ANSI_BLUE + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
+
+         /*
+        Db_Manager db = new Db_Manager();
+        db.InitConnection();
+        Map<Integer, Room> stanze = db.loadRooms();
+        db.CloseConnection();
+
+        System.out.println(stanze.get(2).getObjects().get(0).getObjName());
+        System.out.println(stanze.get(2).getObjects().get(1).getObjName());
+        System.out.println(stanze.get(2).getObjects().get(2).getObjName());
+
+          */
     }
 }
