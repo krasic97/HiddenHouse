@@ -11,7 +11,9 @@ public class Interpreter {
     private static final String NO_OBJ="In questa stanza non ci sono oggetti.";
     public static final String ARE_IN = "Sei nella ";
     public static final String ABSENT_OBJ_A ="Questo oggetto: ";
-    public static final String ABSENT_OBJ_2= "\nnon è presente nella stanza.";
+    public static final String ABSENT_OBJ_B = "\nnon è presente nella stanza.";
+    private static final String CLOSED_OBJ = "Non hai ancora la vista a raggi X.\neApri l'oggetto per vederne il contenuto.";
+
 
     private static final short NORTH=0;
     private static final short EAST=1;
@@ -28,7 +30,6 @@ public class Interpreter {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-
 
     public Interpreter(){
     }
@@ -174,7 +175,7 @@ public class Interpreter {
 
                         }
                     }
-                    out.println(ABSENT_OBJ_A + g.getCurrentRoom().getObjects().get(command_move.getObject_1().getID()).getAlias().get(0) + ABSENT_OBJ_2);
+                    out.println(ABSENT_OBJ_A + g.getCurrentRoom().getObjects().get(command_move.getObject_1().getID()).getAlias().get(0) + ABSENT_OBJ_B);
                     break;
                 case "CLOSE":
                     break;
@@ -193,12 +194,40 @@ public class Interpreter {
                 case "USE":
                     break;
                 case "LOOK":
-                    out.println(g.getCurrentRoom().getDescription());
-                    if(!g.getCurrentRoom().getObjects().isEmpty()) {
-                        g.getCurrentRoom().getObjects().forEach(game_object -> printString(game_object.getAlias().get(0)));
+                    if(command_move.getObject_1()==null){
+                        out.println(g.getCurrentRoom().getDescription());
+                        if(!g.getCurrentRoom().getObjects().isEmpty()) {
+                            g.getCurrentRoom().getObjects().forEach(game_object -> printString(game_object.getAlias().get(0)));
+                        /*
+                        for (GameObject gameObject: g.getCurrentRoom().getObjects() ) {
+                            if(gameObject instanceof gameObjectContainer){
+                                out.println("Questo oggetto-->" + gameObject.getAlias().get(0)+ " contiene: ");
+                                ((gameObjectContainer) gameObject).getContainerList().forEach(gameObject1 -> printString(gameObject1.getAlias().get(0)));
+                            }
+
+
+
+                        }
+
+                         */
+                        }else{
+                            out.println(NO_OBJ);
+                        }
                     }else{
-                        out.println(NO_OBJ);
+                        if(g.getCurrentRoom().getObjects().contains(command_move.getObject_1())){
+                            //TODO cercare di prendere l'oggetto corrispondente nella lista di oggetti della stanza senza considerare l'id
+                            if(g.getCurrentRoom().getObjects().get(command_move.getObject_1().getID()).isOpen()){
+
+                            }else{
+                                out.println(CLOSED_OBJ);
+                            }
+
+                        }else{
+                            out.println(ABSENT_OBJ_A + command_move.getObject_1().getAlias().get(0)+ ABSENT_OBJ_B);
+                        }
                     }
+
+
 
                     break;
                 case "TURN_ON":

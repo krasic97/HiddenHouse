@@ -3,6 +3,7 @@ package Default.Parser;
 import Default.type.Alias;
 import Default.type.Commands_logic;
 import Default.type.GameObject;
+import Default.type.gameObjectContainer;
 
 import java.util.*;
 

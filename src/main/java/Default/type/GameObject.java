@@ -165,5 +165,7 @@ public class GameObject {
     public int hashCode() {
         return Objects.hash(ID, objName, objDescription, alias_name, is_container, where_contained, roomId, Visible, Openable, Pickable, Pushable, Open, Push);
     }
+
+
 }
 
