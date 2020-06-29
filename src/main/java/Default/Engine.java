@@ -6,6 +6,7 @@ import Default.games.HiddenHouse;
 import Default.type.Commands_logic;
 import Default.type.Door;
 import Default.type.Room;
+import Default.type.gameObjectContainer;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -60,20 +61,28 @@ public class Engine {
 
     public static void main(String[] args) throws SQLException {
 
+
         Engine engine = new Engine(new HiddenHouse());
         System.out.println(ANSI_BLUE + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
 
-         /*
+        /*
         Db_Manager db = new Db_Manager();
         db.InitConnection();
         Map<Integer, Room> stanze = db.loadRooms();
         db.CloseConnection();
 
-        System.out.println(stanze.get(2).getObjects().get(0).getObjName());
-        System.out.println(stanze.get(2).getObjects().get(1).getObjName());
-        System.out.println(stanze.get(2).getObjects().get(2).getObjName());
+        if(stanze.get(7).getObjects().get(2) instanceof gameObjectContainer){
+            System.out.println(((gameObjectContainer) stanze.get(7).getObjects().get(2)).getContainerList().get(0).getObjName());
+            System.out.println(((gameObjectContainer) stanze.get(7).getObjects().get(2)).getContainerList().get(1).getObjName());
+        }
 
-          */
+         */
+
+
+
+
+
+
     }
 }

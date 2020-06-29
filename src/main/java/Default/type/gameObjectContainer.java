@@ -1,6 +1,7 @@
 package Default.type;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +43,10 @@ public class gameObjectContainer extends GameObject{
     public void addContList(GameObject gameObj){
         containerList.add(gameObj);
     }
+    public void addAllGameObjList(List<GameObject> ls){
+        containerList.addAll(ls);
+    }
+
 
     public void removeContList(GameObject gameObj){
         containerList.remove(gameObj);

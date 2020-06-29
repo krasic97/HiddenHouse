@@ -1,10 +1,6 @@
 package Default;
 
-import Default.Parser.Parser;
-import Default.type.Alias;
-import Default.type.Commands_logic;
-import Default.type.GameObject;
-import Default.type.Room;
+import Default.type.*;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
