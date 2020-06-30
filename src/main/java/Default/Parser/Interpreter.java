@@ -23,6 +23,7 @@ public class Interpreter {
     private static final String WHAT_PICK_UP = "Ma non so cosa devo raccogliere!";
     private static final String OPENED_CONT = "Il contenitore si è aperto!";
     private static final String PICKED = "Oggetto raccolto!";
+    private static final String NO_PICKABLE = "Pensi di essere Hulk? Non hai le forze necessarie per prenderlo!";
     private static final String IN_INVENTORY = "Nell'inventario hai:";
     private static final String EMPTY_INV ="Non hai oggetti con te.\nRicordati di racoglierli!";
     private static final String OPEN_ACTION = "apri";
@@ -56,7 +57,8 @@ public class Interpreter {
     public void interpret(Commands_logic command_move, GameDescription g, PrintStream out) {
 
         int index = 0;
-        int index_obj;
+        int index_objRoom;
+        GameObject objCont = null;
 
         //if(g.getLogic().get(index).equals(command_move)){
         if (command_move.equals(g.getLogic().get(index))) {
@@ -129,7 +131,7 @@ public class Interpreter {
                 case "INVENTORY":
                     if (!g.getInventory().isEmpty()) {
                         out.println(IN_INVENTORY);
-                        g.getInventory().forEach(game_object -> printString(game_object.getObjName()));
+                        g.getInventory().forEach(game_object -> printString(game_object.getAlias().get(0)));
                     }else{
                         out.println(EMPTY_INV);
                     }
@@ -192,11 +194,12 @@ public class Interpreter {
                             out.println(WHAT_OPEN);
 
                         }else{
-                            index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
+                            index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
+
                             if(command_move.getObject_1() instanceof gameObjectContainer){
-                                if(g.getCurrentRoom().getObjects().get(index_obj).isOpenable()
-                                        && !g.getCurrentRoom().getObjects().get(index_obj).isOpen() ){
-                                    g.getCurrentRoom().getObjects().get(index_obj).setOpen(true);
+                                if(g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()
+                                        && !g.getCurrentRoom().getObjects().get(index_objRoom).isOpen() ){
+                                    g.getCurrentRoom().getObjects().get(index_objRoom).setOpen(true);
                                     out.println(OPENED_CONT);
                                 }
                             }else{
@@ -208,13 +211,13 @@ public class Interpreter {
                     if(command_move.getObject_1()==null){
                         out.println(WHAT_CLOSE);
                     }else{
-                        index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
+                        index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
                         if(command_move.getObject_1() instanceof gameObjectContainer){
-                            if (!g.getCurrentRoom().getObjects().get(index_obj).isOpen()){
+                            if (!g.getCurrentRoom().getObjects().get(index_objRoom).isOpen()){
                                 out.println(ALREADY_CLOSED);
-                            }else if(g.getCurrentRoom().getObjects().get(index_obj).isOpenable()
-                                    && g.getCurrentRoom().getObjects().get(index_obj).isOpen() ){
-                                g.getCurrentRoom().getObjects().get(index_obj).setOpen(false);
+                            }else if(g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()
+                                    && g.getCurrentRoom().getObjects().get(index_objRoom).isOpen() ){
+                                g.getCurrentRoom().getObjects().get(index_objRoom).setOpen(false);
                                 out.println(CLOSED_CONT);
                             }
                         }else{
@@ -230,26 +233,72 @@ public class Interpreter {
                     //PROBABILMENTE DA RIMUOVERE POICHE' "VAI" INSERITO IN PAROLE INUTILI
                     break;
                 case "PICK_UP":
+                    boolean flag=false;
                     if(command_move.getObject_1()==null){
                         out.println(WHAT_PICK_UP);
                     }else{
+                        /*
                         //TODO quando l'oggetto è in un contenitore questa funzione restituisce -1
                         //TODO cercare di passare la lista degli oggetti nel contenitore e non la lista degli oggetti in stanza
-                        index_obj=getItemID(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
+
+                        index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
                         if(g.getCurrentRoom().getObjects().isEmpty()){
                             out.println(NO_OBJ);
-                        }else{
-                            if(g.getCurrentRoom().getObjects().get(index_obj).getObjName().equals(command_move.getObject_1().getObjName())){
-                                if(g.getCurrentRoom().getObjects().get(index_obj).isPickable() ) {
-                                    g.getCurrentRoom().getObjects().get(index_obj).setPickable(false);
-                                    g.getInventory().add(g.getCurrentRoom().getObjects().get(index_obj));
+                        }else if(index_objRoom!=-1){
+                            if(g.getCurrentRoom().getObjects().get(index_objRoom).getObjName().equals(command_move.getObject_1().getObjName())){
+                                if(g.getCurrentRoom().getObjects().get(index_objRoom).isPickable() ) {
+                                    g.getInventory().add(g.getCurrentRoom().getObjects().get(index_objRoom));
+                                    g.getCurrentRoom().getObjects().remove(index_objRoom);
                                     out.println(PICKED);
                                 }
                             }else{
                                 out.println(ABSENT_OBJ_A + command_move.getObject_1().getAlias().get(0) + ABSENT_OBJ_B);
                             }
+                        }else{
+                            if (g.getCurrentRoom().getObjects().get(index_objRoom) instanceof gameObjectContainer) {
+                                for (GameObject ga_obj: ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_objRoom)).getContainerList()) {
+
+                                    objCont=getItemIdCont( ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_objRoom)).getContainerList(),
+                                            command_move.getObject_1().getObjName());
+                                    g.getInventory().add(objCont);
+
+                                }
+
+                            }
                         }
 
+                         */
+                        index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
+                        if(index_objRoom != -1){
+                            //CASO IN CUI L'OGGETTO E' PRESENTE DIRETTAMENTE NELLA STANZA
+                            //E NON IN UN CONTENITORE
+                            if(g.getCurrentRoom().getObjects().get(index_objRoom).isPickable()){
+                                g.getInventory().add(g.getCurrentRoom().getObjects().get(index_objRoom));
+                                g.getCurrentRoom().getObjects().remove(g.getCurrentRoom().getObjects().get(index_objRoom));
+                            }else{
+                                out.println(NO_PICKABLE);
+                            }
+                        }else{
+                            for (GameObject g_obj: g.getCurrentRoom().getObjects()) {
+                                if(g_obj instanceof gameObjectContainer){
+                                    if(g_obj.isOpen() && g_obj.isOpenable()){
+                                        objCont = getItemIdCont(((gameObjectContainer) g_obj).getContainerList(), command_move.getObject_1().getObjName());
+                                        if(objCont!=null){
+                                            g.getInventory().add(objCont);
+                                            ((gameObjectContainer) g_obj).removeContList(objCont);
+                                            out.println(PICKED);
+                                            flag=true;
+                                            break;
+                                        }
+                                    }else{
+                                        out.println(CLOSED_OBJ);
+                                    }
+                                }
+                            }
+                            if(objCont==null && flag!=false){
+                                out.println(NO_OBJ);
+                            }
+                        }
                     }
                     break;
                 case "TALK":
@@ -266,20 +315,20 @@ public class Interpreter {
                             out.println(NO_OBJ);
                         }
                     } else {
-                        index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
-                        if (g.getCurrentRoom().getObjects().get(index_obj).getObjName().equals(command_move.getObject_1().getObjName())) {
+                        index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
+                        if (g.getCurrentRoom().getObjects().get(index_objRoom).getObjName().equals(command_move.getObject_1().getObjName())) {
 
-                            if (g.getCurrentRoom().getObjects().get(index_obj).isOpenable()
-                                    && g.getCurrentRoom().getObjects().get(index_obj).isOpen()) {
+                            if (g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()
+                                    && g.getCurrentRoom().getObjects().get(index_objRoom).isOpen()) {
                                 out.println(IN_CONTAINER);
-                                if(g.getCurrentRoom().getObjects().get(index_obj) instanceof gameObjectContainer){
-                                    ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_obj)).getContainerList().forEach
+                                if(g.getCurrentRoom().getObjects().get(index_objRoom) instanceof gameObjectContainer){
+                                    ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_objRoom)).getContainerList().forEach
                                             (gameObject -> printString(gameObject.getAlias().get(0)));
                                 }
-                            } else if(!g.getCurrentRoom().getObjects().get(index_obj).isOpenable()){
-                                out.println(g.getCurrentRoom().getObjects().get(index_obj).getObjDescription());
+                            } else if(!g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()){
+                                out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                             }else{
-                                out.println(g.getCurrentRoom().getObjects().get(index_obj).getObjDescription());
+                                out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                                 out.println(CLOSED_OBJ);
                             }
                         } else {
@@ -326,18 +375,27 @@ public class Interpreter {
     //e quando il nome viene trovato nella lista allora restituisce l'indice corrispondente
     //nella lista. Risulta essere un metodo necessario poichè gli indici degli oggetti caricati
     //da DB sono diversi da quelli degli oggetti caricati nella lista.
-    private static int getItemID(List<GameObject> g_obj, String name) {
+    private static int getItemIdRoom(List<GameObject> g_obj, String name) {
         for(GameObject obj: g_obj){
-            if(obj.getObjName().equals(name)){
+            if (obj.getObjName().equals(name)){
                 return g_obj.indexOf(obj);
             }
         }
         return -1;
     }
 
+    private static GameObject getItemIdCont(List<GameObject> g_obj, String name){
+        for(GameObject obj: g_obj){
+            if (obj.getObjName().equals(name)){
+                return obj;
+            }
+        }
+        return null;
+    }
 }
 
 
-    
+
+
 
 
