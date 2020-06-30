@@ -39,8 +39,23 @@ public class Engine {
     public void run(){
         //restituisce a interpret(...) l'istanza corrente di GameDescription
         game.setGame(game);
+        try{
+            Thread.sleep(1000);
+        }catch(InterruptedException ex){
+            Thread.currentThread().interrupt();
+        }
         System.out.println(ANSI_RED + "Sei nella " + game.getCurrentRoom().getName()+ "." + ANSI_RESET);
+        try{
+            Thread.sleep(1000);
+        }catch(InterruptedException ex){
+            Thread.currentThread().interrupt();
+        }
         System.out.println("================================================");
+        try{
+            Thread.sleep(1000);
+        }catch(InterruptedException ex){
+            Thread.currentThread().interrupt();
+        }
         System.out.println(ANSI_BLUE + game.getCurrentRoom().getDescription() + ANSI_RESET);
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
@@ -62,22 +77,28 @@ public class Engine {
     public static void main(String[] args) throws SQLException {
 
 
+
         Engine engine = new Engine(new HiddenHouse());
         System.out.println(ANSI_GREEN + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
 
+
+
+
         /*
         Db_Manager db = new Db_Manager();
         db.InitConnection();
-        Map<Integer, Room> stanze = db.loadRooms();
+        Queue<Commands_logic> logic = db.loadLogic();
+
         db.CloseConnection();
 
-        if(stanze.get(7).getObjects().get(2) instanceof gameObjectContainer){
-            System.out.println(((gameObjectContainer) stanze.get(7).getObjects().get(2)).getContainerList().get(0).getObjName());
-            System.out.println(((gameObjectContainer) stanze.get(7).getObjects().get(2)).getContainerList().get(1).getObjName());
+        while(!logic.isEmpty()){
+            System.out.println(logic.poll().getAction());
         }
 
          */
+
+
 
 
 

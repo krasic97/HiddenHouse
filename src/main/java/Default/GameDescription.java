@@ -1,19 +1,18 @@
 package Default;
 
 import Default.type.*;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class GameDescription {
     private GameDescription game;
 
     private List<Room> rooms = new ArrayList<>();
     private List<GameObject> inventory = new ArrayList<>();
-    private List<Commands_logic> logic = new ArrayList<>();
+    private Map<Integer, Commands_logic> logic = new HashMap<>();
     private List<Alias> alias_action = new ArrayList<>();
     private List<Alias> alias_object = new ArrayList<>();
     private Map<Integer, String> actions = new HashMap<>();
@@ -22,6 +21,7 @@ public abstract class GameDescription {
     private Map<Integer, String> descriptions = new HashMap<>();
     private List<String> uselessword = new ArrayList<>();
     private Room currentRoom;
+
 
     public GameDescription getGameDescription(){
         return game;
@@ -62,13 +62,14 @@ public abstract class GameDescription {
         this.alias_object = alias_object;
     }
 
+
     public Room getCurrentRoom() {
         return currentRoom;
     }
     public void setCurrentRoom(Room room){
         this.currentRoom = room;
     }
-    public List<Commands_logic> getLogic() {
+    public Map<Integer, Commands_logic> getLogic() {
         return logic;
     }
     public List<GameObject> getInventory() {

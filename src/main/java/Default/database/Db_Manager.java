@@ -2,6 +2,8 @@
 package Default.database;
 
 import Default.type.*;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import java.sql.*;
 import java.util.*;
@@ -196,7 +198,7 @@ public class Db_Manager {
     }
 
     //per caricare la logica
-    public Map loadLogic() throws SQLException {
+    public Map<Integer, Commands_logic> loadLogic() throws SQLException {
         game_object=loadGame_Object();
         descr=loadDescription();
         Statement stmt = null;
@@ -209,7 +211,7 @@ public class Db_Manager {
                 cl.setObject_1FromName(rs.getString("object_1"), game_object);
                 cl.setObject_2FromName(rs.getString("object_2"), game_object);
                 cl.setDescription(descr.get(rs.getInt("descr")));
-                logic.put(rs.getInt("id"), cl );;
+                logic.put(rs.getInt("id"), cl );
             }
             rs.close();
             stmt.close();

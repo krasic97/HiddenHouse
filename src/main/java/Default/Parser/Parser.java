@@ -12,16 +12,18 @@ public class Parser {
     private String temp;
     private int action=0;
     private int object_1=0;
+    private int object_2=0;
     private Queue<String> str = new LinkedList<>();
     public Parser(){
 
     }
 
     //costruttore
-    public Parser(String temp, int action, int object_1) {
+    public Parser(String temp, int action, int object_1, int object_2) {
         this.temp = temp;
         this.action=action;
         this.object_1 = object_1;
+        this.object_2=object_2;
 
     }
 
@@ -86,6 +88,29 @@ public class Parser {
         }
       return object_1;
     }
+    private int checkObject_2(Queue<String> str, List<Alias> alias_object){
+        List<String> t_object= new ArrayList<>();
+        for(Alias alias : alias_object){
+            t_object.add(alias.getName());
+        }
+        if(!str.isEmpty()) {
+            temp = str.remove();
+            while (temp != null) {
+                if (t_object.contains(temp)) {
+                    //restituisce l'id del corrispondente oggetto
+                    object_2 = alias_object.get(t_object.indexOf(temp)).getId_refer();
+                    temp = null;
+                } else if (!str.isEmpty()) {
+                    //temp = temp.concat(" ").concat(str.pop());
+                    temp = temp.concat(" ").concat(str.remove());
+                } else {
+                    object_2= 0;
+                    break;
+                }
+            }
+        }
+        return object_2;
+    }
 
 
     //restituisce un ArrayList<String> che contiene un comando completo e utilizzabile dal codice
@@ -115,7 +140,7 @@ public class Parser {
                 //concrete_cmd.add(null);
                 concrete_cmd.setObject_1(null);
             }
-            obj_2 = checkObject(splitted_phrase,alias_object);
+            obj_2 = checkObject_2(splitted_phrase,alias_object);
             if (obj_2!=0){
                 //concrete_cmd.add(game_obj.get(obj_2).getObjName());
                 concrete_cmd.setObject_2(game_obj.get(obj_2));
