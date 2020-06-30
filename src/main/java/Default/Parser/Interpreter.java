@@ -7,7 +7,6 @@ import Default.type.gameObjectContainer;
 
 import java.io.PrintStream;
 import java.util.List;
-import java.util.Scanner;
 
 public class Interpreter {
 
@@ -19,8 +18,13 @@ public class Interpreter {
     private static final String CLOSED_OBJ = "Non hai ancora la vista a raggi X.\nApri l'oggetto per vederne il contenuto.";
     private static final String IN_CONTAINER = "Nel contenitore vedi: ";
     private static final String NO_OPENABLE = "Questo oggetto non si può aprire.\n";
-    private static final String WHAT = "Cosa devo aprire?";
+    private static final String WHAT_OPEN = "Cosa devo aprire?";
+    private static final String WHAT_PICK_UP = "Ma non so cosa devo raccogliere!";
     private static final String OPENED_CONT = "Il contenitore si è aperto!";
+    private static final String PICKED = "Oggetto raccolto!";
+    private static final String IN_INVENTORY = "Nell'inventario hai:";
+    private static final String EMPTY_INV ="Non hai oggetti con te.\nRicordati di racoglierli!";
+    private static final String OPEN_ACTION = "apri";
 
 
     private static final short NORTH = 0;
@@ -118,7 +122,10 @@ public class Interpreter {
             switch (command_move.getAction()) {
                 case "INVENTORY":
                     if (!g.getInventory().isEmpty()) {
+                        out.println(IN_INVENTORY);
                         g.getInventory().forEach(game_object -> printString(game_object.getObjName()));
+                    }else{
+                        out.println(EMPTY_INV);
                     }
                     break;
                 case "NORTH":
@@ -177,7 +184,8 @@ public class Interpreter {
                 case "OPEN":
                     //index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
                         if(command_move.getObject_1()==null){
-                            out.println(WHAT);
+                            out.println(WHAT_OPEN);
+
                         }else{
                             index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
                             if(command_move.getObject_1() instanceof gameObjectContainer){
@@ -205,6 +213,27 @@ public class Interpreter {
                 case "WALK":
                     break;
                 case "PICK_UP":
+                    if(command_move.getObject_1()==null){
+                        out.println(WHAT_PICK_UP);
+                    }else{
+                        //TODO quando l'oggetto è in un contenitore questa funzione restituisce -1
+                        //TODO cercare di passare la lista degli oggetti nel contenitore e non la lista degli oggetti in stanza
+                        index_obj=getItemID(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
+                        if(g.getCurrentRoom().getObjects().isEmpty()){
+                            out.println(NO_OBJ);
+                        }else{
+                            if(g.getCurrentRoom().getObjects().get(index_obj).getObjName().equals(command_move.getObject_1().getObjName())){
+                                if(g.getCurrentRoom().getObjects().get(index_obj).isPickable() ) {
+                                    g.getCurrentRoom().getObjects().get(index_obj).setPickable(false);
+                                    g.getInventory().add(g.getCurrentRoom().getObjects().get(index_obj));
+                                    out.println(PICKED);
+                                }
+                            }else{
+                                out.println(ABSENT_OBJ_A + command_move.getObject_1().getAlias().get(0) + ABSENT_OBJ_B);
+                            }
+                        }
+
+                    }
                     break;
                 case "TALK":
                     break;
@@ -232,8 +261,9 @@ public class Interpreter {
                                             (gameObject -> printString(gameObject.getAlias().get(0)));
                                 }
                             } else if(!g.getCurrentRoom().getObjects().get(index_obj).isOpenable()){
-                                out.println(NO_OPENABLE);
+                                out.println(g.getCurrentRoom().getObjects().get(index_obj).getObjDescription());
                             }else{
+                                out.println(g.getCurrentRoom().getObjects().get(index_obj).getObjDescription());
                                 out.println(CLOSED_OBJ);
                             }
                         } else {

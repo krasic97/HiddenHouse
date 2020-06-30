@@ -44,7 +44,8 @@ public class Engine {
         System.out.println(ANSI_BLUE + game.getCurrentRoom().getDescription() + ANSI_RESET);
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().toLowerCase();
+            //TODO
             Commands_logic command_move = parser.parsing(input, game.getAlias_object(), game.getAlias_action(),
                     game.getUselessword(), game.getActions(), game.getGame_obj());
             if (command_move!= null && command_move.getAction()==game.getActions().get(1)){ //action: END
@@ -63,7 +64,7 @@ public class Engine {
 
 
         Engine engine = new Engine(new HiddenHouse());
-        System.out.println(ANSI_BLUE + engine.game.getDescriptions().get(1) + ANSI_RESET);
+        System.out.println(ANSI_GREEN + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
 
         /*
