@@ -63,7 +63,7 @@ public class Engine {
 
 
         Engine engine = new Engine(new HiddenHouse());
-        System.out.println(ANSI_BLUE + engine.game.getDescriptions().get(1) + ANSI_RESET);
+        System.out.println(ANSI_GREEN + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
 
         /*
