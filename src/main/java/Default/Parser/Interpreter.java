@@ -19,8 +19,12 @@ public class Interpreter {
     private static final String CLOSED_OBJ = "Non hai ancora la vista a raggi X.\nApri l'oggetto per vederne il contenuto.";
     private static final String IN_CONTAINER = "Nel contenitore vedi: ";
     private static final String NO_OPENABLE = "Questo oggetto non si può aprire.\n";
+    private static final String NO_CLOSABLE = "Questo oggetto non si può chiudere.\n";
     private static final String WHAT = "Cosa devo aprire?";
+    private static final String WHAT_CLOSE = "Cosa devo chiudere?";
     private static final String OPENED_CONT = "Il contenitore si è aperto!";
+    private static final String CLOSED_CONT = "Hai chiuso il contenitore.";
+    private static final String ALREADY_CLOSED = "Questo oggetto è già chiuso!";
 
 
     private static final short NORTH = 0;
@@ -175,7 +179,6 @@ public class Interpreter {
                     }
                     break;
                 case "OPEN":
-                    //index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
                         if(command_move.getObject_1()==null){
                             out.println(WHAT);
                         }else{
@@ -189,35 +192,46 @@ public class Interpreter {
                             }else{
                                 out.print(NO_OPENABLE);
                             }
-
                         }
-                        if (g.getCurrentRoom().getObjects().contains(command_move.getObject_1())) {
-                            //if(g.)
-                        }
-                    //out.println(ABSENT_OBJ_A + g.getCurrentRoom().getObjects().get(command_move.getObject_1().getID()).getAlias().get(0) + ABSENT_OBJ_B);
                     break;
                 case "CLOSE":
+                    if(command_move.getObject_1()==null){
+                        out.println(WHAT_CLOSE);
+                    }else{
+                        index_obj=getItemID(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
+                        if(command_move.getObject_1() instanceof gameObjectContainer){
+                            if (!g.getCurrentRoom().getObjects().get(index_obj).isOpen()){
+                                out.println(ALREADY_CLOSED);
+                            }else if(g.getCurrentRoom().getObjects().get(index_obj).isOpenable()
+                                    && g.getCurrentRoom().getObjects().get(index_obj).isOpen() ){
+                                g.getCurrentRoom().getObjects().get(index_obj).setOpen(false);
+                                out.println(CLOSED_CONT);
+                            }
+                        }else{
+                            out.print(NO_CLOSABLE);
+                        }
+                    }
                     break;
                 case "PUSH":
                     break;
                 case "PULL":
                     break;
                 case "WALK":
+                    //PROBABILMENTE DA RIMUOVERE POICHE' "VAI" INSERITO IN PAROLE INUTILI
                     break;
                 case "PICK_UP":
                     break;
                 case "TALK":
+                    //TRATTARE IL FANTASMA COME SE FOSSE UN OGGETTO
                     break;
                 case "GIVE":
                     break;
                 case "USE":
                     break;
                 case "LOOK":
-                    //index_obj=getItemID(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
                     if (command_move.getObject_1() == null) {
                         out.println(g.getCurrentRoom().getDescription());
                         if (g.getCurrentRoom().getObjects().isEmpty()) {
-                            //g.getCurrentRoom().getObjects().forEach(game_object -> printString(game_object.getAlias().get(0)));
                             out.println(NO_OBJ);
                         }
                     } else {
@@ -240,7 +254,6 @@ public class Interpreter {
                             out.println(ABSENT_OBJ_A + command_move.getObject_1().getAlias().get(0) + ABSENT_OBJ_B);
                         }
                     }
-
                     break;
                 case "TURN_ON":
                     break;
@@ -277,6 +290,10 @@ public class Interpreter {
         System.out.println(str);
     }
 
+    //Confronta il nome di ogni oggetto della lista g_obj con il nome passato come parametro
+    //e quando il nome viene trovato nella lista allora restituisce l'indice corrispondente
+    //nella lista. Risulta essere un metodo necessario poichè gli indici degli oggetti caricati
+    //da DB sono diversi da quelli degli oggetti caricati nella lista.
     private static int getItemID(List<GameObject> g_obj, String name) {
         for(GameObject obj: g_obj){
             if(obj.getObjName().equals(name)){
