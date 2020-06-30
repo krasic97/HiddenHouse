@@ -1,9 +1,6 @@
 
 package Default.database;
 
-import Default.GameDescription;
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.*;
 import Default.type.*;
 
 import java.sql.*;
