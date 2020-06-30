@@ -217,12 +217,12 @@ public class Interpreter {
                 case "PULL":
                     break;
                 case "WALK":
-                    //PROBABILMENTE DA RIMUOVERE
+                    //PROBABILMENTE DA RIMUOVERE POICHE' "VAI" INSERITO IN PAROLE INUTILI
                     break;
                 case "PICK_UP":
                     break;
                 case "TALK":
-                    //TRA
+                    //TRATTARE IL FANTASMA COME SE FOSSE UN OGGETTO
                     break;
                 case "GIVE":
                     break;
