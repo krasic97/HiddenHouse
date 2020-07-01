@@ -34,11 +34,11 @@ public class Parser {
             ListIterator it = uselessWord.listIterator();
             while(it.hasNext()){
                 if(arr[i].equals(it.next())){
-                    fr= fr.replaceAll(arr[i], " ");
+                    fr= fr.replaceAll(arr[i],"" );
                 }
             }
         }
-        return fr;
+        return fr.trim();
     }
 
     //splitta la frase su " " e restituisce una deque

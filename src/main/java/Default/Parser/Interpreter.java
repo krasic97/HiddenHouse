@@ -26,14 +26,16 @@ public class Interpreter {
     private static final String NO_PICKABLE = "Pensi di essere Hulk? Non hai le forze necessarie per prenderlo!";
     private static final String IN_INVENTORY = "Nell'inventario hai:";
     private static final String EMPTY_INV ="Non hai oggetti con te.\nRicordati di racoglierli!";
-    private static final String OPEN_ACTION = "apri";
-    private static final String NO_CLOSABLE = "Questo oggetto non si può chiudere.";
+    private static final String NO_CLOSABLE = "Questo oggetto non si può chiudere.\n";
     private static final String WHAT_CLOSE = "Cosa devo chiudere?";
     private static final String CLOSED_CONT = "Hai chiuso il contenitore.";
     private static final String ALREADY_CLOSED = "Questo oggetto è già chiuso!";
     private static final String NO_CONT_OBJ = "Non c'è niente in questo contenitore.";
     private static final String ALREADY_OPEN = "Hai già aperto questo oggetto!";
     private static final String NO_OBJ_USE="Ho imparato solo a leggere tra le linee di codice, non ancora nel pensiero!\nRiprova...";
+    private static final String ABSENT = "Non trovo quello che cerchi! Riprova...";
+    private static final String ABSENT_INV ="Oggetto non prensente nell'inventario!\nRaccoglilo prima.";
+    private static final String ALREADY_PUSHED="Hai mosso l'ingranggio ma non è successo nulla.\nSei proprio sfigato!";
 
 
 
@@ -64,9 +66,96 @@ public class Interpreter {
         int index_objRoom;
         int index=-1;
         GameObject objCont = null;
+        GameObject objCont_2 = null;
 
 
+        if(g.getLogic().containsValue(command_move)){
+            index=getKey(g.getLogic(), command_move);
+            switch (index) {
+                case 2 :
+                    objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
+                    objCont.setVisible(false);
+                    OutDescription(g.getLogic().get(index).getDescription());
+                    g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
+                    g.getLogic().remove(index);
 
+                    break;
+                case 5:
+                    objCont=getItemIdCont(g.getInventory(), command_move.getObject_1().getObjName());
+                    objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2().getObjName());
+                    if(g.getInventory().contains(objCont) && g.getInventory().contains(objCont_2)) {
+                        OutDescription(g.getLogic().get(index).getDescription());
+                        g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
+                        g.getLogic().remove(index);
+                    }
+                    break;
+                case 9:
+                    objCont=getItemIdCont(g.getInventory(), command_move.getObject_1().getObjName());
+                    objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2().getObjName());
+                    if(g.getInventory().contains(objCont) && g.getCurrentRoom().getObjects().contains(objCont_2)){
+                        OutDescription(g.getLogic().get(index).getDescription());
+                        g.getCurrentRoom().getDoors().get(WEST).setLocked(false);
+                        g.getCurrentRoom().getObjects().remove(objCont_2);
+                        g.getInventory().remove(objCont);
+                        g.getLogic().remove(index);
+                    }
+                    break;
+                case 11:
+                    g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
+                    g.getLogic().remove(index);
+                    break;
+                case 13:
+                    g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
+                    g.getLogic().remove(index);
+                    break;
+                case 14:
+                    g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
+                    g.getLogic().remove(index);
+                    break;
+                case 17:
+                    g.getCurrentRoom().getDoors().get(NORTH).setLocked(false);
+                    g.getLogic().remove(index);
+                    break;
+                case 18:
+                    break;
+                case 19:
+                    break;
+                case 20:
+                    break;
+                case 21:
+                    break;
+                case 22:
+                    objCont=getItemIdCont(g.getInventory(), command_move.getObject_1().getObjName());
+                    objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2().getObjName());
+                    if(g.getInventory().contains(objCont) && g.getCurrentRoom().getObjects().contains(objCont_2)) {
+                        OutDescription(g.getLogic().get(index).getDescription());
+                        g.getCurrentRoom().getDoors().get(NORTH).setLocked(false);
+                        g.getCurrentRoom().getObjects().remove(objCont_2);
+                        g.getInventory().remove(objCont);
+                        g.getLogic().remove(index);
+                    }
+                    break;
+                case 23:
+                    break;
+                case 24:
+                    break;
+                case 25:
+                    break;
+                case 26:
+                    break;
+                case 27:
+                    break;
+                case 28:
+                    break;
+                case 29:
+                    break;
+                case 30:
+                    System.exit(0);
+                    break;
+
+            }
+
+        }
 
         if (g.getActions().containsValue(command_move.getAction())) {
             switch (command_move.getAction()) {
@@ -155,8 +244,7 @@ public class Interpreter {
                         out.println(WHAT_CLOSE);
                     }else{
                         index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
-                        if(command_move.getObject_1() instanceof gameObjectContainer){
-
+                        if(command_move.getObject_1() instanceof gameObjectContainer && g.getCurrentRoom().getObjects().get(index_objRoom).isVisible()){
                                 if (!g.getCurrentRoom().getObjects().get(index_objRoom).isOpen()){
                                     out.println(ALREADY_CLOSED);
                                 }else if(g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()
@@ -164,7 +252,6 @@ public class Interpreter {
                                     g.getCurrentRoom().getObjects().get(index_objRoom).setOpen(false);
                                     out.println(CLOSED_CONT);
                                 }
-
                         }else{
                             out.print(NO_CLOSABLE);
                         }
@@ -174,45 +261,11 @@ public class Interpreter {
                     break;
                 case "PULL":
                     break;
-                case "WALK":
-                    //PROBABILMENTE DA RIMUOVERE POICHE' "VAI" INSERITO IN PAROLE INUTILI
-                    break;
                 case "PICK_UP":
                     boolean flag=false;
                     if(command_move.getObject_1()==null){
                         out.println(WHAT_PICK_UP);
                     }else{
-                        /*
-                        //TODO quando l'oggetto è in un contenitore questa funzione restituisce -1
-                        //TODO cercare di passare la lista degli oggetti nel contenitore e non la lista degli oggetti in stanza
-
-                        index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
-                        if(g.getCurrentRoom().getObjects().isEmpty()){
-                            out.println(NO_OBJ);
-                        }else if(index_objRoom!=-1){
-                            if(g.getCurrentRoom().getObjects().get(index_objRoom).getObjName().equals(command_move.getObject_1().getObjName())){
-                                if(g.getCurrentRoom().getObjects().get(index_objRoom).isPickable() ) {
-                                    g.getInventory().add(g.getCurrentRoom().getObjects().get(index_objRoom));
-                                    g.getCurrentRoom().getObjects().remove(index_objRoom);
-                                    out.println(PICKED);
-                                }
-                            }else{
-                                out.println(ABSENT_OBJ_A + command_move.getObject_1().getAlias().get(0) + ABSENT_OBJ_B);
-                            }
-                        }else{
-                            if (g.getCurrentRoom().getObjects().get(index_objRoom) instanceof gameObjectContainer) {
-                                for (GameObject ga_obj: ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_objRoom)).getContainerList()) {
-
-                                    objCont=getItemIdCont( ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_objRoom)).getContainerList(),
-                                            command_move.getObject_1().getObjName());
-                                    g.getInventory().add(objCont);
-
-                                }
-
-                            }
-                        }
-
-                         */
                         index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1().getObjName());
                         if(index_objRoom != -1){
                             //CASO IN CUI L'OGGETTO E' PRESENTE DIRETTAMENTE NELLA STANZA
@@ -250,15 +303,31 @@ public class Interpreter {
                 case "TALK":
                     //TRATTARE IL FANTASMA COME SE FOSSE UN OGGETTO
                     break;
-                case "GIVE":
+                case "POUR":
                     break;
                 case "USE":
+                    objCont=getItemIdCont(g.getInventory(), command_move.getObject_1().getObjName());
                     if(command_move.getObject_1()==null || command_move.getObject_2()==null){
                         out.println(NO_OBJ_USE);
-
-                    }else if(g.getInventory().contains(command_move.getObject_1()) && g.getInventory().contains(command_move.getObject_2())){
-                        g.getInventory().remove(command_move.getObject_1());
-                        //TODO sollevare una eccezione che fa ripartire direttamente dall'engine
+                    }else if(g.getInventory().contains(objCont)){
+                        objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2().getObjName());
+                        if(g.getInventory().contains(objCont_2)){
+                            g.getInventory().remove(objCont);
+                        }else{
+                            if(g.getCurrentRoom().getObjects().contains(objCont_2)){
+                                if(objCont_2.isPickable()){
+                                    out.println(ABSENT_INV);
+                                }else{
+                                    g.getInventory().remove(objCont);
+                                }
+                            }else{
+                                out.println(ABSENT);
+                            }
+                        }
+                    }else if(g.getCurrentRoom().getObjects().contains(objCont)){
+                        out.println(ABSENT_INV);
+                    }else{
+                        out.println(ABSENT);
                     }
                     break;
                 case "LOOK":
@@ -301,15 +370,6 @@ public class Interpreter {
                     break;
                 case "TURN_OFF":
                     break;
-                case "BACK":
-                    //DA RIMUOVERE
-                    break;
-                case "SAVE":
-                    //DA RIMUOVERE
-                    break;
-                case "LOAD":
-                    //DA RIMUOVERE
-                    break;
                 case "CUT":
                     if(command_move.getObject_1()==null || command_move.getObject_2()==null){
                         out.println(NO_OBJ_USE);
@@ -320,6 +380,18 @@ public class Interpreter {
                 case "INSERT":
                     break;
                 case "ACTUATE":
+                    if(command_move.getObject_1()==null || command_move.getObject_2()==null){
+                        out.println(NO_OBJ_USE);
+                    }else{
+                        objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
+                        if (g.getCurrentRoom().getObjects().contains(objCont)){
+                            if(objCont.isPushable() && !objCont.isPush()){
+                                objCont.setPush(true);
+                            }else{
+                                out.println(ALREADY_PUSHED);
+                            }
+                        }
+                    }
                     break;
                 case "CLIMB":
                     break;
@@ -327,62 +399,7 @@ public class Interpreter {
         } else {
             out.println("Non ho capito!");
         }
-        if(g.getLogic().containsValue(command_move)){
-            index=getKey(g.getLogic(), command_move);
-            OutDescription(g.getLogic().get(index).getDescription());
-            switch (index) {
-                case 2 :
-                    g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
-                    break;
-                case 5:
-                    g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
-                    break;
-                case 9:
-                    g.getCurrentRoom().getDoors().get(WEST).setLocked(false);
-                    break;
-                case 11:
-                    g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
-                    break;
-                case 13:
-                    g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
-                    break;
-                case 14:
-                    g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
-                    break;
-                case 17:
-                    g.getCurrentRoom().getDoors().get(NORTH).setLocked(false);
-                    break;
-                case 18:
-                    break;
-                case 19:
-                    break;
-                case 20:
-                    break;
-                case 21:
-                    break;
-                case 22:
-                    break;
-                case 23:
-                    break;
-                case 24:
-                    break;
-                case 25:
-                    break;
-                case 26:
-                    break;
-                case 27:
-                    break;
-                case 28:
-                    break;
-                case 29:
-                    break;
-                case 30:
-                    System.exit(0);
-                    break;
 
-            }
-            g.getLogic().remove(index);
-        }
     }
 
     //metodi di servizio
