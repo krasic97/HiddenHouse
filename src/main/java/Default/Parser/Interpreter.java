@@ -35,7 +35,10 @@ public class Interpreter {
     private static final String NO_OBJ_USE="Ho imparato solo a leggere tra le linee di codice, non ancora nel pensiero!\nRiprova...";
     private static final String ABSENT = "Non trovo quello che cerchi! Riprova...";
     private static final String ABSENT_INV ="Oggetto non prensente nell'inventario!\nRaccoglilo prima.";
-    private static final String ALREADY_PUSHED="Hai mosso l'ingranggio ma non è successo nulla.\nSei proprio sfigato!";
+    private static final String GEAR_PUSHED ="Hai mosso l'ingranggio ma non è successo nulla.\nSei proprio sfigato!";
+    private static final String ALREADY_PUSHED="Hai già spinto questo oggetto.";
+    private static final String PUSHED="Ecco fatto!";
+    private static final String NO_PUSHABLE="Non puoi spingere questo oggetto.";
 
 
 
@@ -101,12 +104,24 @@ public class Interpreter {
                     }
                     break;
                 case 11:
-                    g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
-                    g.getLogic().remove(index);
+                    objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
+                    if(g.getCurrentRoom().getObjects().contains(objCont)){
+                        OutDescription(g.getLogic().get(index).getDescription());
+                        objCont.setPush(true);
+                        g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
+                        g.getLogic().remove(index);
+                    }
                     break;
                 case 13:
-                    g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
-                    g.getLogic().remove(index);
+                    objCont=getItemIdCont(g.getInventory(), command_move.getObject_1().getObjName());
+                    objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2().getObjName());
+                    if(g.getInventory().contains(objCont) && g.getCurrentRoom().getObjects().contains(objCont_2)){
+                        OutDescription(g.getLogic().get(index).getDescription());
+                        g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
+                        g.getCurrentRoom().getObjects().remove(objCont_2);
+                        g.getInventory().remove(objCont);
+                        g.getLogic().remove(index);
+                    }
                     break;
                 case 14:
                     g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
@@ -258,6 +273,35 @@ public class Interpreter {
                     }
                     break;
                 case "PUSH":
+                    if(command_move.getObject_1()==null ){
+                        out.println(NO_OBJ_USE);
+                    }else if(command_move.getObject_2()==null){
+                        objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
+                        if (g.getCurrentRoom().getObjects().contains(objCont)){
+                            if(objCont.isPushable() && !objCont.isPush()){
+                                objCont.setPush(true);
+                            }else{
+                                out.println(ALREADY_PUSHED);
+                            }
+                        }else{
+                            out.println(ABSENT);
+                        }
+                    }else if(command_move.getObject_2()!=null){
+                        objCont=getItemIdCont(g.getInventory(), command_move.getObject_1().getObjName());
+                        if(objCont!=null){
+                            objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2().getObjName());
+                            if(objCont_2!=null){
+                                if(objCont_2.isPushable()){
+                                    objCont_2.setPush(true);
+                                    out.println(PUSHED);
+                                }else{
+                                    out.println(NO_PUSHABLE);
+                                }
+                            }else{
+                                out.println(ABSENT);
+                            }
+                        }
+                    }
                     break;
                 case "PULL":
                     break;
@@ -380,7 +424,7 @@ public class Interpreter {
                 case "INSERT":
                     break;
                 case "ACTUATE":
-                    if(command_move.getObject_1()==null || command_move.getObject_2()==null){
+                    if(command_move.getObject_1()==null ){
                         out.println(NO_OBJ_USE);
                     }else{
                         objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1().getObjName());
@@ -388,7 +432,7 @@ public class Interpreter {
                             if(objCont.isPushable() && !objCont.isPush()){
                                 objCont.setPush(true);
                             }else{
-                                out.println(ALREADY_PUSHED);
+                                out.println(GEAR_PUSHED);
                             }
                         }
                     }
