@@ -21,13 +21,12 @@ public class HiddenHouse extends GameDescription {
 
         db.InitConnection();
         getRooms().addAll(db.loadRooms().values());
-        getLogic().addAll(db.loadLogic().values());
+        getLogic().putAll(db.loadLogic());
         getDescriptions().putAll(db.loadDescription());
         getGame_obj().putAll(db.loadGame_Object());
         getActions().putAll(db.loadActions());
         getAlias_action().addAll(db.loadAliasAction());
         getAlias_object().addAll(db.loadAliasObject());
-        
         setCurrentRoom(getRooms().get(0));
         setUselessword(db.loadUseless_wrd());
         db.CloseConnection();

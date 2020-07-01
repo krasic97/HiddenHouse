@@ -6,6 +6,7 @@ public class Commands_logic{
 
     private String description;
     private List<String> CommandsLogicList = new ArrayList<>(3);
+
     private String action;
     private GameObject object_1;
     private GameObject object_2;
@@ -26,6 +27,7 @@ public class Commands_logic{
     }
 
     //metodi
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -82,8 +84,7 @@ public class Commands_logic{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Commands_logic that = (Commands_logic) o;
-        return Objects.equals(description, that.description) &&
-                Objects.equals(CommandsLogicList, that.CommandsLogicList) &&
+        return  Objects.equals(CommandsLogicList, that.CommandsLogicList) &&
                 Objects.equals(action, that.action) &&
                 Objects.equals(object_1, that.object_1) &&
                 Objects.equals(object_2, that.object_2);
