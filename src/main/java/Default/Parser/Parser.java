@@ -3,7 +3,7 @@ package Default.Parser;
 import Default.type.Alias;
 import Default.type.Commands_logic;
 import Default.type.GameObject;
-import Default.type.gameObjectContainer;
+
 
 import java.util.*;
 
@@ -29,16 +29,21 @@ public class Parser {
 
     //rimuove parole non utili
     private String removeUselessWord(String fr, List<String> uselessWord){
+        String frase = " ";
         String[] arr = fr.split(" ");
         for(int i=0; i<arr.length; i++){
+            boolean flag=true;
             ListIterator it = uselessWord.listIterator();
             while(it.hasNext()){
                 if(arr[i].equals(it.next())){
-                    fr= fr.replaceAll(arr[i],"" );
+                    flag=false;
                 }
             }
+            if(flag){
+                frase=frase.concat(arr[i]).concat(" ");
+            }
         }
-        return fr.trim();
+        return frase.trim();
     }
 
     //splitta la frase su " " e restituisce una deque
@@ -122,7 +127,7 @@ public class Parser {
         int action;
         int obj_1;
         int obj_2;
-        //ArrayList<String> concrete_cmd = new ArrayList<>(3);
+
         Commands_logic concrete_cmd = new Commands_logic();
 
         fr = removeUselessWord(fr, uselessWord);
@@ -130,30 +135,26 @@ public class Parser {
         action = checkAction(splitted_phrase, alias_action);
 
         if(action!=0){
-            //concrete_cmd.add(primitive_commands.get(action));
             concrete_cmd.setAction(actions.get(action));
             obj_1 = checkObject(splitted_phrase, alias_object);
             if(obj_1!=0){
-                //concrete_cmd.add(game_obj.get(obj_1).getObjName());
-                concrete_cmd.setObject_1(game_obj.get(obj_1));
+                //concrete_cmd.setObject_1(game_obj.get(obj_1));
+                concrete_cmd.setObject_1(game_obj.get(obj_1).getObjName());
             }else{
-                //concrete_cmd.add(null);
+
                 concrete_cmd.setObject_1(null);
             }
             obj_2 = checkObject_2(splitted_phrase,alias_object);
             if (obj_2!=0){
-                //concrete_cmd.add(game_obj.get(obj_2).getObjName());
-                concrete_cmd.setObject_2(game_obj.get(obj_2));
+
+                //concrete_cmd.setObject_2(game_obj.get(obj_2));
+                concrete_cmd.setObject_2(game_obj.get(obj_2).getObjName());
             }else{
-                //concrete_cmd.add(null);
                 concrete_cmd.setObject_2(null);
             }
         }else{
-            //concrete_cmd.add(null);
             concrete_cmd.setAction(null);
-            //concrete_cmd.add(null);
             concrete_cmd.setObject_1(null);
-            //concrete_cmd.add(null);
             concrete_cmd.setObject_2(null);
         }
         return concrete_cmd;

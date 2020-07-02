@@ -208,8 +208,10 @@ public class Db_Manager {
             while (rs.next()) {
                 cl = new Commands_logic();
                 cl.setAction(rs.getString("action"));
-                cl.setObject_1FromName(rs.getString("object_1"), game_object);
-                cl.setObject_2FromName(rs.getString("object_2"), game_object);
+                cl.setObject_1(rs.getString("object_1"));
+                cl.setObject_2(rs.getString("object_2"));
+                //cl.setObject_1FromName(rs.getString("object_1"), game_object);
+                //cl.setObject_2FromName(rs.getString("object_2"), game_object);
                 cl.setDescription(descr.get(rs.getInt("descr")));
                 logic.put(rs.getInt("id"), cl );
             }
@@ -361,42 +363,34 @@ public class Db_Manager {
 
         try{
             for (int i=1; i < rooms.size(); i++) {
+                index=0;
                 stmt.setInt(1, i);
                 rs = stmt.executeQuery();
-                go= new GameObject();
                 objectList= new ArrayList<>();
+                container= new gameObjectContainer();
                 while(rs.next()){
-                    /*
-                    if(game_object.get(rs.getInt("id")).isIs_container()){
-
-                        container =  new gameObjectContainer();
-                        container =  game_object.get(rs.getInt("id"));
-
+                    if(rs.getBoolean("visible")){
+                        if(rs.getInt("where_contained")!=0){    //SE SONO OGGETTI CONTENUTI
+                            //mi riempie una lista con altri oggetti corrispondenti
+                            index=rs.getInt("where_contained");
+                            objectList.add(game_object.get(rs.getInt("id")));
+                            //go= new gameObjectContainer();
+                            //game_object.get(rs.getInt("where_contained")).addContList(go);
+                            //rooms.get(i).addObject(game_object.get(rs.getInt("where_contained")));
+                        }else if(!game_object.get(rs.getInt("game_object.id")).isIs_container()){ //SE NON SONO NE CONTENUTI NE CONTENITORI
+                            //mi carica gli oggetti che non sono ne contenitori e neanche contenuti
+                            rooms.get(i).addObject( game_object.get(rs.getInt("game_object.id")));
+                        }
+                    }
+                    if(index!=0) { //SE SONO OGGETTI CONTENITORI
+                        //mi carica gli oggetti che sono contenitori
+                        container = (gameObjectContainer) game_object.get(index);
+                        container.addAllGameObjList(objectList);
                         rooms.get(i).addObject(container);
 
-                    }else {
-                        rooms.get(i).addObject( game_object.get(rs.getInt("id")));
-                   }
-                     */
-                    if(rs.getInt("where_contained")!=0){    //SE SONO OGGETTI CONTENUTI
-                        //mi riempie una lista con altri oggetti corrispondenti
-                        index=rs.getInt("where_contained");
-                        objectList.add(game_object.get(rs.getInt("id")));
-                        //go= new gameObjectContainer();
-                        //game_object.get(rs.getInt("where_contained")).addContList(go);
-                        //rooms.get(i).addObject(game_object.get(rs.getInt("where_contained")));
-                    }else if(!game_object.get(rs.getInt("id")).isIs_container()){ //SE NON SONO NE CONTENUTI NE CONTENITORI
-                        //mi carica gli oggetti che non sono ne contenitori e neanche contenuti
-                        rooms.get(i).addObject( game_object.get(rs.getInt("id")));
                     }
-                }
-                if(index!=0) { //SE SONO OGGETTI CONTENITORI
-                    //mi carica gli oggetti che sono contenitori
-                    container = (gameObjectContainer) game_object.get(index);
-                    container.addAllGameObjList(objectList);
-                    rooms.get(i).addObject(container);
-                }
 
+                    }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

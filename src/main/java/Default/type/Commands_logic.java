@@ -8,11 +8,13 @@ public class Commands_logic{
     private List<String> CommandsLogicList = new ArrayList<>(3);
 
     private String action;
-    private GameObject object_1;
-    private GameObject object_2;
+    //private GameObject object_1;
+    //private GameObject object_2;
+    private String object_1;
+    private String object_2;
 
     //costruttori
-    public Commands_logic(String action, GameObject object_1, GameObject object_2, String description) {
+    public Commands_logic(String action, String object_1, String object_2, String description) {
         this.action = action;
         this.object_1 = object_1;
         this.object_2 = object_2;
@@ -34,14 +36,16 @@ public class Commands_logic{
     public void setObject_1FromName(String s, Map<Integer, GameObject> gameObjectMap){
         for (Integer k:gameObjectMap.keySet()) {
             if(gameObjectMap.get(k).getObjName().equals(s)){
-                this.object_1=gameObjectMap.get(k);
+                //this.object_1=gameObjectMap.get(k);
+                this.object_2=gameObjectMap.get(k).getObjName();
             }
         }
     }
     public void setObject_2FromName(String s, Map<Integer, GameObject> gameObjectMap){
         for (Integer k:gameObjectMap.keySet()) {
             if(gameObjectMap.get(k).getObjName().equals(s)){
-                this.object_2=gameObjectMap.get(k);
+                //this.object_2=gameObjectMap.get(k);
+                this.object_2=gameObjectMap.get(k).getObjName();
             }
         }
     }
@@ -66,16 +70,16 @@ public class Commands_logic{
     public String getAction() {
         return action;
     }
-    public void setObject_1(GameObject object_1) {
+    public void setObject_1(String object_1) {
         this.object_1 = object_1;
     }
-    public GameObject getObject_1() {
+    public String getObject_1() {
         return object_1;
     }
-    public void setObject_2(GameObject object_2) {
+    public void setObject_2(String object_2) {
         this.object_2 = object_2;
     }
-    public GameObject getObject_2() {
+    public String getObject_2() {
         return object_2;
     }
 
