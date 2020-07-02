@@ -77,32 +77,21 @@ public class Engine {
     public static void main(String[] args) throws SQLException {
 
 
-
         Engine engine = new Engine(new HiddenHouse());
         System.out.println(ANSI_GREEN + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
 
-
-
-
         /*
         Db_Manager db = new Db_Manager();
         db.InitConnection();
-        Queue<Commands_logic> logic = db.loadLogic();
+        Map<Integer, Room> stanze = db.loadRooms();
 
         db.CloseConnection();
 
-        while(!logic.isEmpty()){
-            System.out.println(logic.poll().getAction());
-        }
+        System.out.println(stanze.get(6).getObjects().get(0).getObjName());
+        System.out.println(stanze.get(6).getObjects().get(1).getObjName());
 
          */
-
-
-
-
-
-
 
 
     }
