@@ -77,8 +77,16 @@ public class Engine {
     public static void main(String[] args) throws SQLException {
 
 
+
         Engine engine = new Engine(new HiddenHouse());
-        System.out.println(ANSI_GREEN + engine.game.getDescriptions().get(1) + ANSI_RESET);
+        System.out.println(ANSI_GREEN+" __    __   __   _______   _______   _______ .__   __.     __    __    ______    __    __       _______. _______ \n" +
+                "|  |  |  | |  | |       \\ |       \\ |   ____||  \\ |  |    |  |  |  |  /  __  \\  |  |  |  |     /       ||   ____|\n" +
+                "|  |__|  | |  | |  .--.  ||  .--.  ||  |__   |   \\|  |    |  |__|  | |  |  |  | |  |  |  |    |   (----`|  |__   \n" +
+                "|   __   | |  | |  |  |  ||  |  |  ||   __|  |  . `  |    |   __   | |  |  |  | |  |  |  |     \\   \\    |   __|  \n" +
+                "|  |  |  | |  | |  '--'  ||  '--'  ||  |____ |  |\\   |    |  |  |  | |  `--'  | |  `--'  | .----)   |   |  |____ \n" +
+                "|__|  |__| |__| |_______/ |_______/ |_______||__| \\__|    |__|  |__|  \\______/   \\______/  |_______/    |_______|"+ ANSI_RESET);
+
+        System.out.println("\n"+ANSI_GREEN + engine.game.getDescriptions().get(1) + ANSI_RESET);
         engine.run();
 
         /*
@@ -88,11 +96,7 @@ public class Engine {
 
         db.CloseConnection();
 
-        System.out.println(stanze.get(6).getObjects().get(0).getObjName());
-        System.out.println(stanze.get(6).getObjects().get(1).getObjName());
-
          */
-
 
     }
 }

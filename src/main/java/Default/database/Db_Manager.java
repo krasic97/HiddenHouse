@@ -50,8 +50,9 @@ public class Db_Manager {
     private static final String query6 = "select * from doors";
     private static final String query7 = "select * from game_object";
     private static final String query8 = "select * from rooms";
-    private static final String query9 = "select game_object.* from rooms " +
-            "inner join game_object on rooms.id= game_object.room_id where rooms.id=?";
+    //private static final String query9 = "select game_object.* from rooms " +
+     //       "inner join game_object on rooms.id= game_object.room_id where rooms.id=?";
+    private static final String query9 ="select * from game_object where room_id=?";
     private static final String query10 = "select alias_object.alias_name from alias_object " +
             "inner join game_object on alias_object.id_object = game_object.id where game_object.id =?";
     private static final String query11 = "select * from useless_words";
@@ -362,35 +363,34 @@ public class Db_Manager {
         stmt = getConn().prepareStatement(getQuery9());
 
         try{
-            for (int i=1; i < rooms.size(); i++) {
+            for (int i=1; i <= rooms.size(); i++) {
                 index=0;
                 stmt.setInt(1, i);
                 rs = stmt.executeQuery();
                 objectList= new ArrayList<>();
                 container= new gameObjectContainer();
                 while(rs.next()){
+                    //index=0;
                     if(rs.getBoolean("visible")){
                         if(rs.getInt("where_contained")!=0){    //SE SONO OGGETTI CONTENUTI
                             //mi riempie una lista con altri oggetti corrispondenti
                             index=rs.getInt("where_contained");
                             objectList.add(game_object.get(rs.getInt("id")));
-                            //go= new gameObjectContainer();
-                            //game_object.get(rs.getInt("where_contained")).addContList(go);
-                            //rooms.get(i).addObject(game_object.get(rs.getInt("where_contained")));
-                        }else if(!game_object.get(rs.getInt("game_object.id")).isIs_container()){ //SE NON SONO NE CONTENUTI NE CONTENITORI
+                        }else if(!game_object.get(rs.getInt("id")).isIs_container()){ //SE NON SONO NE CONTENUTI NE CONTENITORI
                             //mi carica gli oggetti che non sono ne contenitori e neanche contenuti
-                            rooms.get(i).addObject( game_object.get(rs.getInt("game_object.id")));
+                            rooms.get(i).addObject( game_object.get(rs.getInt("id")));
                         }
-                    }
-                    if(index!=0) { //SE SONO OGGETTI CONTENITORI
-                        //mi carica gli oggetti che sono contenitori
-                        container = (gameObjectContainer) game_object.get(index);
-                        container.addAllGameObjList(objectList);
-                        rooms.get(i).addObject(container);
 
                     }
 
-                    }
+                }
+                if(index!=0) { //SE SONO OGGETTI CONTENITORI
+                    //mi carica gli oggetti che sono contenitori
+                    container = (gameObjectContainer) game_object.get(index);
+                    container.addAllGameObjList(objectList);
+                    rooms.get(i).addObject(container);
+                }
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
