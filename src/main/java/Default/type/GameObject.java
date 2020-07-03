@@ -7,6 +7,7 @@ public class GameObject {
     private String objName;
     private String objDescription;
     private List<String> alias_name = new ArrayList<>();
+    private int use_with;
     private boolean is_container;
     private int where_contained;
     private int roomId;
@@ -58,6 +59,13 @@ public class GameObject {
 
     }
 
+
+    public int getUse_with() {
+        return use_with;
+    }
+    public void setUse_with(int use_with) {
+        this.use_with = use_with;
+    }
 
     public void addAlias(String a){
         alias_name.add(a);

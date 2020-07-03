@@ -128,6 +128,7 @@ public class Db_Manager {
                     container.setVisible(rs.getBoolean("visible"));
                     container.setIs_container(rs.getBoolean("is_container"));
                     container.setWhere_contained(rs.getInt("where_contained"));
+                    container.setUse_with(rs.getInt("use_with"));
                     game_object.put(rs.getInt("id"), container );
 
                 }else{
@@ -142,6 +143,7 @@ public class Db_Manager {
                     go.setVisible(rs.getBoolean("visible"));
                     go.setIs_container(rs.getBoolean("is_container"));
                     go.setWhere_contained(rs.getInt("where_contained"));
+                    go.setUse_with(rs.getInt("use_with"));
                     game_object.put(rs.getInt("id"), go );
                 }
 
@@ -332,6 +334,7 @@ public class Db_Manager {
             ResultSet rs = stmt.executeQuery(getQuery8());
             while (rs.next()) {
                 rm = new Room();
+                rm.setId(rs.getShort("id"));
                 rm.setName(rs.getString("name"));
                 rm.setDescription(descr.get(rs.getInt("description")));
                 rm.addDoor(doors.get(rs.getInt("north")));

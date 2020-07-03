@@ -30,6 +30,15 @@ public class Room {
     }
 
     //Methods
+
+    public void setId(short id) {
+        this.id = id;
+    }
+
+    public short getId() {
+        return id;
+    }
+
     public String getName(){
         return this.name;
     }
