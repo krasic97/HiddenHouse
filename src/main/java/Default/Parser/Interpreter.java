@@ -40,6 +40,7 @@ public class Interpreter {
     private static final String PUSHED="Ecco fatto!";
     private static final String NO_PUSHABLE="Non puoi spingere questo oggetto.";
     private static final String NO_ONE = "Ma con chi vuoi parlare ? Sei solo...";
+    private static final String NO_USABLE = "Attenzione! Non puoi utilizzare questo oggetto in questo modo.";
 
 
 
@@ -85,6 +86,7 @@ public class Interpreter {
 
                     break;
                 case 5:
+                case 10:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
                     if(g.getInventory().contains(objCont) && g.getInventory().contains(objCont_2)) {
@@ -131,6 +133,7 @@ public class Interpreter {
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 17:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
@@ -153,9 +156,16 @@ public class Interpreter {
                     }
                     break;
                 case 21:
-                    OutDescription(g.getLogic().get(index).getDescription());
-                    g.getCurrentRoom().addObject(g.getGame_obj().get(36));
-                    g.getLogic().remove(index);
+                    if(g.getCurrentRoom().getId()==10){
+                        OutDescription(g.getLogic().get(index).getDescription());
+                        //TODO non mette il fantasma in stanza
+
+                        g.getGame_obj().get(36).setVisible(true);
+                        //g.getRooms().get(9).addObject(g.getGame_obj().get(36));
+                        g.getCurrentRoom().addObject(g.getGame_obj().get(36));
+                        g.getLogic().remove(index);
+                    }
+
                     break;
                 case 22:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
@@ -165,6 +175,8 @@ public class Interpreter {
                         g.getCurrentRoom().getDoors().get(NORTH).setLocked(false);
                         g.getCurrentRoom().getObjects().remove(objCont_2);
                         g.getLogic().remove(index);
+                    }else{
+                        out.println(ABSENT);
                     }
                     break;
                 case 23:
@@ -197,15 +209,20 @@ public class Interpreter {
                     objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
                     if(g.getInventory().contains(objCont_2) && g.getCurrentRoom().getObjects().contains(objCont)){
                         OutDescription(g.getLogic().get(index).getDescription());
-                        g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
+                        //g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
                         //g.getCurrentRoom().getObjects().remove(objCont_2);
                         g.getLogic().remove(index);
                     }
 
                     break;
                 case 29:
-                    OutDescription(g.getLogic().get(index).getDescription());
-                    g.getLogic().remove(index);
+                    if(g.getCurrentRoom().getId()==14){
+                        //OutDescription(g.getLogic().get(index).getDescription());
+                        g.getGame_obj().get(35).setVisible(true);
+                        g.getRooms().get(0).addObject(g.getGame_obj().get(35));
+                        g.getCurrentRoom().getDoors().get(WEST).setLocked(false);
+                        g.getLogic().remove(index);
+                    }
                     break;
                 case 30:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
@@ -335,38 +352,6 @@ public class Interpreter {
                     }
                     break;
                 case "PUSH":
-                    /*
-                    if(command_move.getObject_1()==null ){
-                        out.println(NO_OBJ_USE);
-                    }else if(command_move.getObject_2()==null){
-                        objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
-                        if (g.getCurrentRoom().getObjects().contains(objCont)){
-                            if(objCont.isPushable() && !objCont.isPush()){
-                                objCont.setPush(true);
-                            }else{
-                                out.println(ALREADY_PUSHED);
-                            }
-                        }else{
-                            out.println(ABSENT);
-                        }
-                    }else if(command_move.getObject_2()!=null){
-                        objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
-                        if(objCont!=null){
-                            objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
-                            if(objCont_2!=null){
-                                if(objCont_2.isPushable()){
-                                    objCont_2.setPush(true);
-                                    out.println(PUSHED);
-                                }else{
-                                    out.println(NO_PUSHABLE);
-                                }
-                            }else{
-                                out.println(ABSENT);
-                            }
-                        }
-                    }
-
-                     */
                     if(command_move.getObject_1()==null){
                         out.println(NO_OBJ_USE);
                     }else{
@@ -374,8 +359,6 @@ public class Interpreter {
                         if (objCont!=null) {
                             if (objCont.isPushable() && !objCont.isPush() && objCont.isVisible()) {
                                 objCont.setPush(true);
-                            } else {
-                                out.println(ALREADY_PUSHED);
                             }
                         }else{
                             out.println(ABSENT);
@@ -428,14 +411,23 @@ public class Interpreter {
                     }else if(g.getInventory().contains(objCont)){
                         objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
                         if(g.getInventory().contains(objCont_2)){
-                            g.getInventory().remove(objCont);
+                            if(objCont.getUse_with()==objCont_2.getID()){
+                                g.getInventory().remove(objCont);
+                            }else{
+                                out.println(NO_USABLE);
+                            }
+
                         }else{
                             objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
-                            if(g.getCurrentRoom().getObjects().contains(objCont_2)){
+                            if(objCont_2!=null){
                                 if(objCont_2.isPickable()){
                                     out.println(ABSENT_INV);
                                 }else{
-                                    g.getInventory().remove(objCont);
+                                    if(objCont.getUse_with()==objCont_2.getID()){
+                                        g.getInventory().remove(objCont);
+                                    }else{
+                                        out.println(NO_USABLE);
+                                    }
                                 }
                             }else{
                                 out.println(ABSENT);
@@ -495,8 +487,12 @@ public class Interpreter {
                         if(objCont!=null){
                             objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
                             if(objCont_2!=null){
-                                g.getInventory().remove(objCont_2);
-                                g.getCurrentRoom().getObjects().remove(objCont);
+                                if(objCont_2.getUse_with()==objCont.getID()){
+                                    g.getInventory().remove(objCont_2);
+                                    g.getCurrentRoom().getObjects().remove(objCont);
+                                }else{
+                                    out.println(NO_USABLE);
+                                }
                             }else{
                                     out.println(ABSENT);
                             }
@@ -513,10 +509,23 @@ public class Interpreter {
                         if(objCont!=null){
                             objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
                             if(objCont_2!=null){
-                                g.getInventory().remove(objCont);
-                                g.getCurrentRoom().getObjects().remove(objCont_2);
-                            }else{
+                                if(objCont.getUse_with()==objCont_2.getID()){
+                                    g.getInventory().remove(objCont);
+                                }else{
+                                    out.println(NO_USABLE);
+                                }
+                            }else {
+                                objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
+                                if(objCont_2!=null ){
+                                    if(objCont.getUse_with()==objCont_2.getID()){
+                                        g.getInventory().remove(objCont);
+                                    }else{
+                                        out.println(NO_USABLE);
+                                    }
+
+                                }else{
                                     out.println(ABSENT);
+                                }
                             }
                         }else{
                             out.println(ABSENT_INV);
