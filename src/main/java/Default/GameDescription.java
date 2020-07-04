@@ -7,30 +7,23 @@ import java.util.*;
 
 public abstract class GameDescription {
     private GameDescription game;
-
     private List<Room> rooms = new ArrayList<>();
     private List<GameObject> inventory = new ArrayList<>();
     private Map<Integer, Commands_logic> logic = new HashMap<>();
     private List<Alias> alias_action = new ArrayList<>();
     private List<Alias> alias_object = new ArrayList<>();
     private Map<Integer, String> actions = new HashMap<>();
-    //da sostituire con una List<GameObject>
     private Map<Integer, GameObject> game_obj = new HashMap<>();
     private Map<Integer, String> descriptions = new HashMap<>();
     private List<String> uselessword = new ArrayList<>();
     private Room currentRoom;
 
-
+    //Metodi
     public GameDescription getGameDescription(){
         return game;
     }
-
     public void setGame(GameDescription game) {
         this.game = game;
-    }
-
-    public void setDescriptions(Map<Integer, String> descriptions) {
-        this.descriptions = descriptions;
     }
     public Map<Integer, String> getDescriptions() {
         return descriptions;
@@ -38,29 +31,15 @@ public abstract class GameDescription {
     public List<Alias> getAlias_action() {
         return alias_action;
     }
-    public void setAlias_action(List<Alias> alias_action) {
-        this.alias_action = alias_action;
-    }
     public Map<Integer, String> getActions() {
         return actions;
-    }
-    public void setActions(Map<Integer,String> actions) {
-        this.actions = actions;
     }
     public Map<Integer, GameObject> getGame_obj() {
         return game_obj;
     }
-    public void setGame_obj(Map<Integer, GameObject> game_obj) {
-        this.game_obj = game_obj;
-    }
     public List<Alias> getAlias_object() {
         return alias_object;
     }
-    public void setAlias_object(List<Alias> alias_object) {
-        this.alias_object = alias_object;
-    }
-
-
     public Room getCurrentRoom() {
         return currentRoom;
     }

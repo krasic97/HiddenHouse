@@ -18,23 +18,25 @@ public class GameObject {
     private boolean Open = false;
     private boolean Push = false;
 
-
-    public GameObject(short ID, String objName, boolean is_container, int where_contained) {
+    //Costruttori
+    public GameObject(boolean is_container, int where_contained) {
         this.where_contained = where_contained;
-
         this.is_container = is_container;
     }
+
     public GameObject(short ID, boolean is_container, int where_contained){
         this.ID = ID;
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
-    public GameObject(short ID, String objName, int objDescription, Set<String> alias, boolean is_container, int where_contained){
+
+    public GameObject(short ID, String objName, boolean is_container, int where_contained){
         this.ID = ID;
         this.objName = objName;
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
+
     public GameObject(short ID, String objName, String objDescription, boolean is_container, int where_contained){
         this.ID = ID;
         this.objName = objName;
@@ -42,6 +44,7 @@ public class GameObject {
         this.where_contained = where_contained;
         this.is_container = is_container;
     }
+
     public GameObject(short ID, String objName, String objDescription, List<String> alias, boolean is_container, int where_contained, int roomId, boolean Visible){
         this.ID = ID;
         this.objName = objName;
@@ -52,21 +55,16 @@ public class GameObject {
         this.roomId=roomId;
         this.Visible=Visible;
     }
-    public GameObject(short ID, String objName) {
 
-    }
-    public GameObject() {
+    public GameObject() {}
 
-    }
-
-
+    //Metodi
     public int getUse_with() {
         return use_with;
     }
     public void setUse_with(int use_with) {
         this.use_with = use_with;
     }
-
     public void addAlias(String a){
         alias_name.add(a);
     }
@@ -87,9 +85,6 @@ public class GameObject {
     }
     public void setObjDescription(String objDescription){
         this.objDescription = objDescription;
-    }
-    public int getRoomId() {
-        return roomId;
     }
     public void setRoomId(int roomId) {
         this.roomId = roomId;
@@ -118,12 +113,8 @@ public class GameObject {
     public void setPushable(boolean Pushable){
         this.Pushable = Pushable;
     }
-
     public boolean isIs_container() {
         return is_container;
-    }
-    public int isWhere_contained() {
-        return where_contained;
     }
     public void setIs_container(boolean is_container) {
         this.is_container = is_container;
@@ -131,7 +122,6 @@ public class GameObject {
     public void setWhere_contained(int where_contained) {
         this.where_contained = where_contained;
     }
-
     public boolean isOpen(){
         return Open;
     }
@@ -144,7 +134,6 @@ public class GameObject {
     public void setPush(boolean Push){
         this.Push = Push;
     }
-
     public List<String> getAlias(){
         return alias_name;
     }
@@ -173,7 +162,5 @@ public class GameObject {
     public int hashCode() {
         return Objects.hash(ID, objName, objDescription, alias_name, is_container, where_contained, roomId, Visible, Openable, Pickable, Pushable, Open, Push);
     }
-
-
 }
 

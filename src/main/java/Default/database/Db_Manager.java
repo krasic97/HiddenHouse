@@ -8,18 +8,18 @@ import java.sql.*;
 import java.util.*;
 
 public class Db_Manager {
-
     public Db_Manager(){
-
     }
-    // JDBC driver name and Default.database URL
+
+    //Nome driver JDBC e URL di Default.database
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost/hiddenhouse";
 
-    //  Database credentials
+    //Credenziali database
     private static final String USER = "root";
     private static final String PASS = "27031997";
-    //Connection to Default.database
+
+    //Connessione a Default.database
     private Connection conn = null;
 
     private Door dr = new Door();
@@ -35,9 +35,6 @@ public class Db_Manager {
     private Map<Integer,String> actions = new HashMap<>();
     private Map<Integer, Door> doors = new HashMap<>();
     private Map<Integer, GameObject> game_object = new HashMap<Integer, GameObject>();
-    //private BidiMap<Integer, GameObject> game_object = new DualHashBidiMap<>();
-
-
     private Map<Integer, Room> rooms = new HashMap<>();
     private List<String> useless_wrd = new ArrayList<>();
 
@@ -49,16 +46,12 @@ public class Db_Manager {
     private static final String query6 = "select * from doors";
     private static final String query7 = "select * from game_object";
     private static final String query8 = "select * from rooms";
-    //private static final String query9 = "select game_object.* from rooms " +
-     //       "inner join game_object on rooms.id= game_object.room_id where rooms.id=?";
     private static final String query9 ="select * from game_object where room_id=?";
     private static final String query10 = "select alias_object.alias_name from alias_object " +
             "inner join game_object on alias_object.id_object = game_object.id where game_object.id =?";
     private static final String query11 = "select * from useless_words";
-    private static final String query12 = "select description.descr from rooms inner join description on " +
-            "rooms.description=description.id where rooms.id = ?;";
-    private static final String query13="select id from game_object where where_contained= ?";
 
+    //Metodi
     public static String getQuery1() {
         return query1;
     }
@@ -90,15 +83,11 @@ public class Db_Manager {
         return query10;
     }
     public static String getQuery11(){ return query11;}
-    public static String getQuery13() {
-        return query13;
-    }
 
     public void InitConnection(){
         try{
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException throwables) {
@@ -114,7 +103,6 @@ public class Db_Manager {
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery7());
             while (rs.next()) {
-
                 if(rs.getBoolean("is_container")){
                     container = new gameObjectContainer();
                     container.setID((short) rs.getInt("id"));
@@ -129,7 +117,6 @@ public class Db_Manager {
                     container.setWhere_contained(rs.getInt("where_contained"));
                     container.setUse_with(rs.getInt("use_with"));
                     game_object.put(rs.getInt("id"), container );
-
                 }else{
                     go = new GameObject();
                     go.setID((short) rs.getInt("id"));
@@ -145,7 +132,6 @@ public class Db_Manager {
                     go.setUse_with(rs.getInt("use_with"));
                     game_object.put(rs.getInt("id"), go );
                 }
-
             }
             rs.close();
             stmt.close();
@@ -183,13 +169,11 @@ public class Db_Manager {
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery2());
-
             while(rs.next()){
                 descr.put(rs.getInt("id"), rs.getString("descr"));
             }
             rs.close();
             stmt.close();
-
         }catch (SQLException throwables){
             throwables.printStackTrace();
         }finally {
@@ -212,8 +196,6 @@ public class Db_Manager {
                 cl.setAction(rs.getString("action"));
                 cl.setObject_1(rs.getString("object_1"));
                 cl.setObject_2(rs.getString("object_2"));
-                //cl.setObject_1FromName(rs.getString("object_1"), game_object);
-                //cl.setObject_2FromName(rs.getString("object_2"), game_object);
                 cl.setDescription(descr.get(rs.getInt("descr")));
                 logic.put(rs.getInt("id"), cl );
             }
@@ -231,7 +213,6 @@ public class Db_Manager {
     //Per caricare gli alias da passare al metodo parsing
     public List<Alias> loadAliasAction(){
         Statement stmt = null;
-
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery3());
@@ -248,7 +229,6 @@ public class Db_Manager {
     }
     public List<Alias> loadAliasObject(){
         Statement stmt = null;
-
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery4());
@@ -257,13 +237,11 @@ public class Db_Manager {
                 als.setName(rs.getString("alias_name"));
                 als.setId_refer(rs.getInt("id_object"));
                 alias_object.add(als);
-
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return alias_object;
-
     }
 
     //per caricare i comandi primitivi(azioni)
@@ -272,14 +250,11 @@ public class Db_Manager {
         try{
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery5());
-
             while(rs.next()){
                 actions.put(rs.getInt("id"), rs.getString("action"));
-                //actions.add(rs.getString("action"));
             }
             rs.close();
             stmt.close();
-
         }catch (SQLException throwables){
             throwables.printStackTrace();
         }finally {
@@ -287,15 +262,12 @@ public class Db_Manager {
                 stmt.close();
         }
         return actions;
-
     }
 
     //Per il caricamento completo delle porte
     public Map loadDoors() throws SQLException {
-
         descr=loadDescription();
         Statement stmt = null;
-
         try {
             stmt = getConn().createStatement();
             ResultSet rs = stmt.executeQuery(getQuery6());
@@ -311,14 +283,12 @@ public class Db_Manager {
             }
             rs.close();
             stmt.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
             if (stmt != null)
                 stmt.close();
         }
-
         return doors;
     }
 
@@ -350,7 +320,6 @@ public class Db_Manager {
             if (stmt != null)
                 stmt.close();
         }
-
         //metodo per aggiungere oggetti alla stanza
         loadRoomObj();
         return rooms;
@@ -359,11 +328,9 @@ public class Db_Manager {
         game_object = loadGame_Object();
         int index = 0;
         List<GameObject> objectList = new ArrayList<>();
-
         PreparedStatement stmt;
         ResultSet rs;
         stmt = getConn().prepareStatement(getQuery9());
-
         try{
             for (int i=1; i <= rooms.size(); i++) {
                 index=0;
@@ -372,7 +339,6 @@ public class Db_Manager {
                 objectList= new ArrayList<>();
                 container= new gameObjectContainer();
                 while(rs.next()){
-                    //index=0;
                     if(rs.getBoolean("visible")){
                         if(rs.getInt("where_contained")!=0){    //SE SONO OGGETTI CONTENUTI
                             //mi riempie una lista con altri oggetti corrispondenti
@@ -382,9 +348,7 @@ public class Db_Manager {
                             //mi carica gli oggetti che non sono ne contenitori e neanche contenuti
                             rooms.get(i).addObject( game_object.get(rs.getInt("id")));
                         }
-
                     }
-
                 }
                 if(index!=0) { //SE SONO OGGETTI CONTENITORI
                     //mi carica gli oggetti che sono contenitori
@@ -392,7 +356,6 @@ public class Db_Manager {
                     container.addAllGameObjList(objectList);
                     rooms.get(i).addObject(container);
                 }
-
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -405,6 +368,7 @@ public class Db_Manager {
     public Connection getConn(){
         return conn;
     }
+
     public void CloseConnection() {
         try{
             if(conn!=null)
@@ -412,7 +376,6 @@ public class Db_Manager {
         }catch(SQLException se){
             se.printStackTrace();
         }
-
     }
 
     //per caricare le parole inutili da rimuovere dalla stringa grezza

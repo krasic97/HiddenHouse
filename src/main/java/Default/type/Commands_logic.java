@@ -6,63 +6,23 @@ public class Commands_logic{
 
     private String description;
     private List<String> CommandsLogicList = new ArrayList<>(3);
-
     private String action;
-    //private GameObject object_1;
-    //private GameObject object_2;
     private String object_1;
     private String object_2;
 
-    //costruttori
-    public Commands_logic(String action, String object_1, String object_2, String description) {
-        this.action = action;
-        this.object_1 = object_1;
-        this.object_2 = object_2;
-        this.description = description;
-    }
     public Commands_logic() {
         this.action = null;
         this.object_1 = null;
         this.object_2 = null;
         this.description = null;
-
     }
 
-    //metodi
-
+    //Metodi
     public void setDescription(String description) {
         this.description = description;
     }
-    public void setObject_1FromName(String s, Map<Integer, GameObject> gameObjectMap){
-        for (Integer k:gameObjectMap.keySet()) {
-            if(gameObjectMap.get(k).getObjName().equals(s)){
-                //this.object_1=gameObjectMap.get(k);
-                this.object_2=gameObjectMap.get(k).getObjName();
-            }
-        }
-    }
-    public void setObject_2FromName(String s, Map<Integer, GameObject> gameObjectMap){
-        for (Integer k:gameObjectMap.keySet()) {
-            if(gameObjectMap.get(k).getObjName().equals(s)){
-                //this.object_2=gameObjectMap.get(k);
-                this.object_2=gameObjectMap.get(k).getObjName();
-            }
-        }
-    }
     public String getDescription() {
         return description;
-    }
-    public List<String> getCommandsLogicList() {
-        return CommandsLogicList;
-    }
-    public void setCommandsLogicList(List<String> commandsLogicList) {
-        CommandsLogicList = commandsLogicList;
-    }
-    public void addCommList(String command){
-        CommandsLogicList.add(command);
-    }
-    public void remove(Commands_logic command){
-        CommandsLogicList.remove(command);
     }
     public void setAction(String action) {
         this.action = action;

@@ -3,19 +3,15 @@ package Default.Parser;
 import Default.type.Alias;
 import Default.type.Commands_logic;
 import Default.type.GameObject;
-
-
 import java.util.*;
 
 public class Parser {
-    //private String[] arr;
     private String temp;
     private int action=0;
     private int object_1=0;
     private int object_2=0;
     private Queue<String> str = new LinkedList<>();
     public Parser(){
-
     }
 
     //costruttore
@@ -24,7 +20,6 @@ public class Parser {
         this.action=action;
         this.object_1 = object_1;
         this.object_2=object_2;
-
     }
 
     //rimuove parole non utili
@@ -46,7 +41,7 @@ public class Parser {
         return frase.trim();
     }
 
-    //splitta la frase su " " e restituisce una deque
+    //splitta la frase su " " e restituisce una queue
     private Queue<String> splitCommand(String fr) {
         String[] arr = fr.split("\\s+");
         for (String s : arr){
@@ -54,16 +49,15 @@ public class Parser {
         }
         return str;
     }
+
     //restituisce l'id della corrispondente azione
     private int checkAction(Queue<String> str, List<Alias> alias_action){
         List<String> t_alias = new ArrayList<>();
         for (Alias alias : alias_action) {
             t_alias.add(alias.getName());
         }
-
         temp = str.remove();
         if(t_alias.contains(temp)){
-        //if(t_alias.indexOf(temp)!=-1){
             action = alias_action.get(t_alias.indexOf(temp)).getId_refer();
         }
         return action;
@@ -83,7 +77,6 @@ public class Parser {
                     object_1 = alias_object.get(t_object.indexOf(temp)).getId_refer();
                     temp = null;
                 } else if (!str.isEmpty()) {
-                    //temp = temp.concat(" ").concat(str.pop());
                     temp = temp.concat(" ").concat(str.remove());
                 } else {
                     object_1= 0;
@@ -93,6 +86,7 @@ public class Parser {
         }
       return object_1;
     }
+
     private int checkObject_2(Queue<String> str, List<Alias> alias_object){
         List<String> t_object= new ArrayList<>();
         for(Alias alias : alias_object){
@@ -106,7 +100,6 @@ public class Parser {
                     object_2 = alias_object.get(t_object.indexOf(temp)).getId_refer();
                     temp = null;
                 } else if (!str.isEmpty()) {
-                    //temp = temp.concat(" ").concat(str.pop());
                     temp = temp.concat(" ").concat(str.remove());
                 } else {
                     object_2= 0;
@@ -116,7 +109,6 @@ public class Parser {
         }
         return object_2;
     }
-
 
     //restituisce un ArrayList<String> che contiene un comando completo e utilizzabile dal codice
     //ad es. usa cristallo arancione radio----> USE ORANGE_CRYSTAL RADIO
@@ -138,16 +130,12 @@ public class Parser {
             concrete_cmd.setAction(actions.get(action));
             obj_1 = checkObject(splitted_phrase, alias_object);
             if(obj_1!=0){
-                //concrete_cmd.setObject_1(game_obj.get(obj_1));
                 concrete_cmd.setObject_1(game_obj.get(obj_1).getObjName());
             }else{
-
                 concrete_cmd.setObject_1(null);
             }
             obj_2 = checkObject_2(splitted_phrase,alias_object);
             if (obj_2!=0){
-
-                //concrete_cmd.setObject_2(game_obj.get(obj_2));
                 concrete_cmd.setObject_2(game_obj.get(obj_2).getObjName());
             }else{
                 concrete_cmd.setObject_2(null);
@@ -159,13 +147,5 @@ public class Parser {
         }
         return concrete_cmd;
     }
-
-
-
-
-
-
-
-
 }
 

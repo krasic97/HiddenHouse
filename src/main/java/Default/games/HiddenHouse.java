@@ -2,23 +2,16 @@ package Default.games;
 
 import Default.GameDescription;
 import Default.Parser.Interpreter;
-import Default.Parser.Parser;
 import Default.database.Db_Manager;
 import Default.type.Commands_logic;
-import Default.type.Room;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 public class HiddenHouse extends GameDescription {
-    //Create Game's Map
+    //Inizializza la mappa del gioco
     @Override
     public void init() throws Exception {
         Db_Manager db = new Db_Manager();
-
         db.InitConnection();
         getRooms().addAll(db.loadRooms().values());
         getLogic().putAll(db.loadLogic());

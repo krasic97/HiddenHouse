@@ -1,8 +1,6 @@
 package Default.type;
 
 public class Door {
-
-    private int id;
     private String name;
     private int Previous_Room;
     private int Next_Room;
@@ -10,34 +8,12 @@ public class Door {
     private String Description;
     private String Lock_Description;
 
-    public Door(int id, String name, int previous_room, int next_room, String description, String lock_description){
-        this.id=id;
-        this.name = name;
-        this.Previous_Room = previous_room;
-        this.Next_Room = next_room;
-        this.Description = description;
-        this.Lock_Description = lock_description;
-    }
+    //Costruttore
+    public Door() {}
 
-    public Door() {
-
-    }
-
-
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
+    //Metodi
     public void setName(String name) {
         this.name = name;
-    }
-    public int getPrevious_Room() {
-        return Previous_Room;
     }
     public void setPrevious_Room(int previous_Room) {
         Previous_Room = previous_Room;
@@ -66,19 +42,5 @@ public class Door {
     public void setLocked(boolean locked) {
         isLocked = locked;
     }
-
-
-    public String getRequestDescr(boolean isLocked) {
-        if (isLocked) {
-                return getLock_Description();
-        } else if (getDescription() != null) {
-            return null;
-        } else {
-            return getDescription();
-        }
-    }
-
-
-
 }
 

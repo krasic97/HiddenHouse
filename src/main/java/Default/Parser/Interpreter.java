@@ -15,7 +15,6 @@ public class Interpreter {
     private static final String NO_OBJ = "In questa stanza non ci sono oggetti.";
     private static final String ARE_IN = "Sei nella ";
     private static final String ABSENT_OBJ = "Questo oggetto non è presente nella stanza.";
-    //private static final String ABSENT_OBJ_B = "\nnon è presente nella stanza.";
     private static final String CLOSED_OBJ = "Non hai ancora la vista a raggi X.\nApri l'oggetto per vederne il contenuto.";
     private static final String IN_CONTAINER = "Nel contenitore vedi: ";
     private static final String NO_OPENABLE = "Questo oggetto non si può aprire.";
@@ -35,14 +34,8 @@ public class Interpreter {
     private static final String NO_OBJ_USE="Ho imparato solo a leggere tra le linee di codice, non ancora nel pensiero!\nRiprova...";
     private static final String ABSENT = "Non trovo quello che cerchi! Riprova...";
     private static final String ABSENT_INV ="Oggetto non prensente nell'inventario!\nRaccoglilo prima.";
-    private static final String GEAR_PUSHED ="Hai mosso l'ingranggio ma non è successo nulla.\nSei proprio sfigato!";
-    private static final String ALREADY_PUSHED="Hai già spinto questo oggetto.";
-    private static final String PUSHED="Ecco fatto!";
-    private static final String NO_PUSHABLE="Non puoi spingere questo oggetto.";
     private static final String NO_ONE = "Ma con chi vuoi parlare ? Sei solo...";
     private static final String NO_USABLE = "Attenzione! Non puoi utilizzare questo oggetto in questo modo.";
-
-
 
     private static final short NORTH = 0;
     private static final short EAST = 1;
@@ -51,28 +44,15 @@ public class Interpreter {
 
     //costanti per dare colore agli output
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-
-
 
     public Interpreter() {
     }
-
     public void interpret(Commands_logic command_move, GameDescription g, PrintStream out) {
-
-
         int index_objRoom;
         int index=-1;
         GameObject objCont = null;
-        GameObject objCont_2 = null;
-
+        GameObject objCont_2;
 
         if(g.getLogic().containsValue(command_move)){
             index=getKey(g.getLogic(), command_move);
@@ -83,8 +63,8 @@ public class Interpreter {
                     OutDescription(g.getLogic().get(index).getDescription());
                     g.getCurrentRoom().getDoors().get(SOUTH).setLocked(false);
                     g.getLogic().remove(index);
-
                     break;
+
                 case 5:
                 case 10:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
@@ -95,17 +75,17 @@ public class Interpreter {
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 9:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
                     if(g.getInventory().contains(objCont) && g.getCurrentRoom().getObjects().contains(objCont_2)){
                         OutDescription(g.getLogic().get(index).getDescription());
                         g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
-                        //g.getCurrentRoom().getObjects().remove(objCont_2);
-                        //g.getInventory().remove(objCont);
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 11:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     if(g.getCurrentRoom().getObjects().contains(objCont)){
@@ -115,6 +95,8 @@ public class Interpreter {
                         g.getLogic().remove(index);
                     }
                     break;
+
+
                 case 13:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
@@ -124,6 +106,7 @@ public class Interpreter {
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 14:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
@@ -143,10 +126,14 @@ public class Interpreter {
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 18:
                     break;
+
                 case 19:
                     break;
+                    
+                case 15:
                 case 20:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
@@ -155,30 +142,30 @@ public class Interpreter {
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 21:
                     if(g.getCurrentRoom().getId()==10){
                         OutDescription(g.getLogic().get(index).getDescription());
-                        //TODO non mette il fantasma in stanza
-
                         g.getGame_obj().get(36).setVisible(true);
-                        //g.getRooms().get(9).addObject(g.getGame_obj().get(36));
                         g.getCurrentRoom().addObject(g.getGame_obj().get(36));
                         g.getLogic().remove(index);
                     }
-
                     break;
+
                 case 22:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
                     if(g.getInventory().contains(objCont) && g.getCurrentRoom().getObjects().contains(objCont_2)){
                         OutDescription(g.getLogic().get(index).getDescription());
                         g.getCurrentRoom().getDoors().get(NORTH).setLocked(false);
+                        g.getInventory().remove(objCont);
                         g.getCurrentRoom().getObjects().remove(objCont_2);
                         g.getLogic().remove(index);
                     }else{
                         out.println(ABSENT);
                     }
                     break;
+
                 case 23:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     objCont.setVisible(false);
@@ -186,57 +173,62 @@ public class Interpreter {
                     g.getCurrentRoom().getDoors().get(WEST).setLocked(false);
                     g.getLogic().remove(index);
                     break;
+
                 case 24:
                     break;
+
                 case 25:
                     OutDescription(g.getLogic().get(index).getDescription());
                     g.getLogic().remove(index);
                     break;
+
                 case 26:
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
                     if(g.getInventory().contains(objCont) && g.getCurrentRoom().getObjects().contains(objCont_2)){
                         OutDescription(g.getLogic().get(index).getDescription());
                         g.getCurrentRoom().getDoors().get(WEST).setLocked(false);
-                        //g.getCurrentRoom().getObjects().remove(objCont_2);
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 27:
                     break;
+
                 case 28:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
                     if(g.getInventory().contains(objCont_2) && g.getCurrentRoom().getObjects().contains(objCont)){
                         OutDescription(g.getLogic().get(index).getDescription());
-                        //g.getCurrentRoom().getDoors().get(EAST).setLocked(false);
-                        //g.getCurrentRoom().getObjects().remove(objCont_2);
                         g.getLogic().remove(index);
                     }
-
                     break;
+
                 case 29:
                     if(g.getCurrentRoom().getId()==14){
-                        //OutDescription(g.getLogic().get(index).getDescription());
                         g.getGame_obj().get(35).setVisible(true);
                         g.getRooms().get(0).addObject(g.getGame_obj().get(35));
                         g.getCurrentRoom().getDoors().get(WEST).setLocked(false);
                         g.getLogic().remove(index);
                     }
                     break;
+
                 case 30:
+                case 12:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     if(g.getCurrentRoom().getObjects().contains(objCont)){
                         OutDescription(g.getLogic().get(index).getDescription());
                         System.exit(0);
                     }
                     break;
+
                 case 31:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     if(g.getCurrentRoom().getObjects().contains(objCont)){
                         OutDescription(g.getLogic().get(index).getDescription());
                     }
                     break;
+
                 case 32:
                     objCont=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_1());
                     if(objCont==null){
@@ -244,8 +236,8 @@ public class Interpreter {
                     }else{
                         OutDescription(g.getLogic().get(index).getDescription());
                     }
+                    break;
             }
-
         }
 
         if (g.getActions().containsValue(command_move.getAction())) {
@@ -258,6 +250,7 @@ public class Interpreter {
                         out.println(EMPTY_INV);
                     }
                     break;
+
                 case "NORTH":
                     if (g.getCurrentRoom().getDoors().get(NORTH) == null) {
                         out.println(NO_DOOR);
@@ -271,6 +264,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "SOUTH":
                     if (g.getCurrentRoom().getDoors().get(SOUTH) == null) {
                         out.println(NO_DOOR);
@@ -284,6 +278,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "EAST":
                     if (g.getCurrentRoom().getDoors().get(EAST) == null) {
                         out.println(NO_DOOR);
@@ -297,6 +292,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "WEST":
                     if (g.getCurrentRoom().getDoors().get(WEST) == null) {
                         out.println(NO_DOOR);
@@ -310,34 +306,36 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "OPEN":
                         if(command_move.getObject_1()==null){
                             out.println(WHAT_OPEN);
-
                         }else{
                             index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1());
-
-                            //if(command_move.getObject_1() instanceof gameObjectContainer){
-                            if(g.getCurrentRoom().getObjects().get(index_objRoom) instanceof gameObjectContainer){
-
-                                if(g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()
-                                        && !g.getCurrentRoom().getObjects().get(index_objRoom).isOpen() ){
-                                    g.getCurrentRoom().getObjects().get(index_objRoom).setOpen(true);
-                                    out.println(OPENED_CONT);
+                            if(index_objRoom!=-1){
+                                if(g.getCurrentRoom().getObjects().get(index_objRoom) instanceof gameObjectContainer){
+                                    if(g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()
+                                            && !g.getCurrentRoom().getObjects().get(index_objRoom).isOpen() ){
+                                        g.getCurrentRoom().getObjects().get(index_objRoom).setOpen(true);
+                                        out.println(OPENED_CONT);
+                                    }else{
+                                        out.println(ALREADY_OPEN);
+                                    }
                                 }else{
-                                    out.println(ALREADY_OPEN);
+                                    out.println(NO_OPENABLE);
                                 }
                             }else{
-                                out.print(NO_OPENABLE);
+                                out.println(ABSENT_OBJ);
                             }
+
                         }
                     break;
+
                 case "CLOSE":
                     if(command_move.getObject_1()==null){
                         out.println(WHAT_CLOSE);
                     }else{
                         index_objRoom=getItemIdRoom(g.getCurrentRoom().getObjects(),command_move.getObject_1());
-                        //if(command_move.getObject_1() instanceof gameObjectContainer && g.getCurrentRoom().getObjects().get(index_objRoom).isVisible()){
                         if(g.getCurrentRoom().getObjects().get(index_objRoom) instanceof gameObjectContainer && g.getCurrentRoom().getObjects().get(index_objRoom).isVisible()){
                                 if (!g.getCurrentRoom().getObjects().get(index_objRoom).isOpen()){
                                     out.println(ALREADY_CLOSED);
@@ -347,10 +345,11 @@ public class Interpreter {
                                     out.println(CLOSED_CONT);
                                 }
                         }else{
-                            out.print(NO_CLOSABLE);
+                            out.println(NO_CLOSABLE);
                         }
                     }
                     break;
+
                 case "PUSH":
                     if(command_move.getObject_1()==null){
                         out.println(NO_OBJ_USE);
@@ -365,6 +364,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "PICK_UP":
                     boolean flag=false;
                     if(command_move.getObject_1()==null){
@@ -404,6 +404,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "USE":
                     objCont=getItemIdCont(g.getInventory(), command_move.getObject_1());
                     if(command_move.getObject_1()==null || command_move.getObject_2()==null){
@@ -416,7 +417,6 @@ public class Interpreter {
                             }else{
                                 out.println(NO_USABLE);
                             }
-
                         }else{
                             objCont_2=getItemIdCont(g.getCurrentRoom().getObjects(), command_move.getObject_2());
                             if(objCont_2!=null){
@@ -439,9 +439,9 @@ public class Interpreter {
                         out.println(ABSENT);
                     }
                     break;
+
                 case "LOOK":
                     if (command_move.getObject_1() == null) {
-                        //out.println(g.getCurrentRoom().getDescription());
                         OutDescription(g.getCurrentRoom().getDescription());
                         if (g.getCurrentRoom().getObjects().isEmpty()) {
                             out.println(NO_OBJ);
@@ -462,10 +462,9 @@ public class Interpreter {
                                         }
                                     }
                                 } else if(!g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()){
-                                    //out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
+
                                     OutDescription(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                                 }else{
-                                    //out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                                     OutDescription(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                                     out.println(CLOSED_OBJ);
                                 }
@@ -474,9 +473,7 @@ public class Interpreter {
                             }
                         }else{
                             index_objRoom=getItemIdRoom(g.getInventory(),command_move.getObject_1());
-                            //if(g.getInventory().get(index_objRoom).getObjName().equals(command_move.getObject_1())){
                             if(index_objRoom!=-1){
-                                //out.println(g.getInventory().get(index_objRoom).getObjDescription());
                                 OutDescription(g.getInventory().get(index_objRoom).getObjDescription());
                             }else{
                                 out.println(ABSENT_OBJ);
@@ -484,6 +481,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "CUT":
                     if(command_move.getObject_1()==null || command_move.getObject_2()==null){
                         out.println(NO_OBJ_USE);
@@ -506,6 +504,7 @@ public class Interpreter {
                         }
                     }
                     break;
+
                 case "INSERT":
                     if(command_move.getObject_1()==null || command_move.getObject_2()==null){
                         out.println(NO_OBJ_USE);
@@ -521,7 +520,7 @@ public class Interpreter {
                                 }
                             }else {
                                 objCont_2=getItemIdCont(g.getInventory(), command_move.getObject_2());
-                                if(objCont_2!=null ){
+                                if(objCont_2!=null){
                                     if(objCont.getUse_with()==objCont_2.getID()){
                                         g.getInventory().remove(objCont);
                                     }else{
@@ -537,7 +536,6 @@ public class Interpreter {
                         }
                     }
                     break;
-
             }
         } else {
             out.println("Non ho capito!");
