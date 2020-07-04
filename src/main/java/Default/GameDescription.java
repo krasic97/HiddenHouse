@@ -1,8 +1,6 @@
 package Default;
 
 import Default.type.*;
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import java.io.PrintStream;
 import java.util.*;

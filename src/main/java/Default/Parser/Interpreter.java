@@ -18,7 +18,7 @@ public class Interpreter {
     //private static final String ABSENT_OBJ_B = "\nnon è presente nella stanza.";
     private static final String CLOSED_OBJ = "Non hai ancora la vista a raggi X.\nApri l'oggetto per vederne il contenuto.";
     private static final String IN_CONTAINER = "Nel contenitore vedi: ";
-    private static final String NO_OPENABLE = "Questo oggetto non si può aprire.\n";
+    private static final String NO_OPENABLE = "Questo oggetto non si può aprire.";
     private static final String WHAT_OPEN = "Cosa devo aprire?";
     private static final String WHAT_PICK_UP = "Ma non so cosa devo raccogliere!";
     private static final String OPENED_CONT = "Il contenitore si è aperto!";
@@ -26,7 +26,7 @@ public class Interpreter {
     private static final String NO_PICKABLE = "Pensi di essere Hulk? Non hai le forze necessarie per prenderlo!";
     private static final String IN_INVENTORY = "Nell'inventario hai:";
     private static final String EMPTY_INV ="Non hai oggetti con te.\nRicordati di racoglierli!";
-    private static final String NO_CLOSABLE = "Questo oggetto non si può chiudere.\n";
+    private static final String NO_CLOSABLE = "Questo oggetto non si può chiudere.";
     private static final String WHAT_CLOSE = "Cosa devo chiudere?";
     private static final String CLOSED_CONT = "Hai chiuso il contenitore.";
     private static final String ALREADY_CLOSED = "Questo oggetto è già chiuso!";
@@ -441,7 +441,8 @@ public class Interpreter {
                     break;
                 case "LOOK":
                     if (command_move.getObject_1() == null) {
-                        out.println(g.getCurrentRoom().getDescription());
+                        //out.println(g.getCurrentRoom().getDescription());
+                        OutDescription(g.getCurrentRoom().getDescription());
                         if (g.getCurrentRoom().getObjects().isEmpty()) {
                             out.println(NO_OBJ);
                         }
@@ -461,9 +462,11 @@ public class Interpreter {
                                         }
                                     }
                                 } else if(!g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()){
-                                    out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
+                                    //out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
+                                    OutDescription(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                                 }else{
-                                    out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
+                                    //out.println(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
+                                    OutDescription(g.getCurrentRoom().getObjects().get(index_objRoom).getObjDescription());
                                     out.println(CLOSED_OBJ);
                                 }
                             } else {
@@ -471,8 +474,10 @@ public class Interpreter {
                             }
                         }else{
                             index_objRoom=getItemIdRoom(g.getInventory(),command_move.getObject_1());
-                            if(g.getInventory().get(index_objRoom).getObjName().equals(command_move.getObject_1())){
-                                out.println(g.getInventory().get(index_objRoom).getObjDescription());
+                            //if(g.getInventory().get(index_objRoom).getObjName().equals(command_move.getObject_1())){
+                            if(index_objRoom!=-1){
+                                //out.println(g.getInventory().get(index_objRoom).getObjDescription());
+                                OutDescription(g.getInventory().get(index_objRoom).getObjDescription());
                             }else{
                                 out.println(ABSENT_OBJ);
                             }
@@ -543,7 +548,7 @@ public class Interpreter {
     //metodi di servizio
     private void OutDescription(String s) {
         if (s != null) {
-            System.out.println(s);
+            System.out.println(s.replace(". ",".\n"));
         }
     }
 
