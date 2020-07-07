@@ -20,9 +20,17 @@ Le tabelle presenti nella base di dati realizzata sono le seguenti:
 
 Di seguito si riportano le strutture di ogni tabella:
 + **Tabella action_alias** <br>![actionalias](doc/action_alias.png)
++ **Tabella alias_object** <br>![aliasobject](doc/alias_object.png)
++ **Tabella commands** <br>![commands](doc/commands.png)
++ **Tabella description** <br>![description](doc/description.png)
++ **Tabella doors** <br>![doors](doc/doors.png)
++ **Tabella game_logic** <br>![gamelogic](doc/game_logic.png)
++ **Tabella game_object** <br>![gameobject](doc/game_object.png)
+* **Tabella rooms** <br>![rooms](doc/rooms.png)
++ **Tabella useless_words** <br>![uslswords](doc/useless_words.png)
 
 # 4. Caratteristiche tecniche e classi realizzate
-L'idea alla base del funzionamento del motore di gioco da noi creato è il caricamento dell'intera avventura testuale tramite un database contenente:
+L'idea alla base del funzionamento del motore di gioco da noi creato è il caricamento dell'intera avventura testuale tramite il sopracitato database, contenente:
 * La logica del gioco
 * I comandi primitivi (comandi che verranno interpretati dal parser)
 * Gli oggetti del gioco
