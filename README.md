@@ -75,3 +75,9 @@ Per quanto riguarda l'avanzamento nell'avventura e il responso del sistema ai va
 |                      | getDoors() -> List      |
 |                      | addObject(Object) -> List      |
 |                      | getObjects() -> List      |
+
+**DA FINIRE**
+| Osservazioni      | Costruttori di Rooms    | Costruttori di Rooms           |
+| ----------------- | --------------------------- | ---------------------------------- |
+|     | Room()                   | Error                              |
+| getName()     | Error                   | Error                              |
