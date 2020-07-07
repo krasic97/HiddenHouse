@@ -59,3 +59,19 @@ Per l'interpretazione dei comandi impartiti dall'utente in linguaggio semi-natur
 
 Per quanto riguarda l'avanzamento nell'avventura e il responso del sistema ai vari comandi impartiti dall'utente è stata definita la classe **Interpreter** che con il suo metodo **_interpret_** offre due switch. Il primo permetterà il puro avanzamento nel gioco seguendo la logica impartita dal DB, con il secondo sarà possibile eseguire tutti quei comandi comuni a più azioni di gioco.
 
+# 5. Specifiche algebriche
+**Rooms**
+| Specifica sintattica |                                      |
+| -------------------- | ------------------------------------ |
+| Tipi:                | Room, short, String, String, List, List, Object, Object         |
+| Operatori:           | Room()-> Room |
+|                      | setIid(short) -> short          |
+|                      | getId() -> short         |
+|                      | setName(String) -> String      |
+|                      | getName() -> String      |
+|                      | setDescription(String) -> String      |
+|                      | getDescription() -> String      |
+|                      | addDoor(Object) -> List      |
+|                      | getDoors() -> List      |
+|                      | addObject(Object) -> List      |
+|                      | getObjects() -> List      |
