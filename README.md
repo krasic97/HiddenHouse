@@ -18,6 +18,9 @@ Le tabelle presenti nella base di dati realizzata sono le seguenti:
 
 ![tables](doc/db_tables.png)
 
+Di seguito si riportano le strutture di ogni tabella:
++ **Tabella action_alias** <br>![actionalias](doc/action_alias.png)
+
 # 4. Caratteristiche tecniche e classi realizzate
 L'idea alla base del funzionamento del motore di gioco da noi creato è il caricamento dell'intera avventura testuale tramite un database contenente:
 * La logica del gioco
