@@ -81,3 +81,10 @@ Per quanto riguarda l'avanzamento nell'avventura e il responso del sistema ai va
 | ----------------- | --------------------------- | ---------------------------------- |
 |     | Room()                   | Error                              |
 | getName()     | Error                   | Error                              |
+
+# 6. Concetti teorici utilizzati
+### JDBC ###
+E’ l'acronimo di _Java Data Base Connectivity_ ed è lo standard che permette l'indipendenza delle piattaforme anche per le applicazioni che operano su basi di dati. Offre un driver manager che permette l'interrogazione delle basi di dati tramite le query. Nell'ambito del progetto, il database è stato creato ed utilizzato al fine di poter permettere l'esecuzione potenziale di più avventure sfruttando il medesimo motore di gioco. Per questo motivo al lancio del sistema vengono scaricati tutti i dati dal DB mediante una serie di query e una volta scaricati i dati e chiusa la connessione, il gioco prosegue sfruttando i dati scaricati in locale.
+
+### RTTI ###
+Sta per _Run-Time Type Identification_ e permette appunto l'identificazione di tipo a runtime. Abbiamo fatto uso della RTTI attraverso la parola chiave _instanceof_ che ci è stata utile in tutte quelle situazioni in cui data una stanza con oggetti di tipo **GameObject** e **gameObjectContainer**, si rendeva necessario applicare comportamenti e operazioni diverse sulla base del fatto che l'istanza corrente specificata dal giocatore fosse un oggetto di gioco o un contenitore di oggetti di gioco.
