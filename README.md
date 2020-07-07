@@ -15,6 +15,7 @@ del codice
 
 # 3. Descrizione della base di dati
 Le tabelle presenti nella base di dati realizzata sono le seguenti:
+
 ![tables](doc/db_tables.png)
 
 # 4. Caratteristiche tecniche e classi realizzate
