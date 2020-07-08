@@ -112,3 +112,6 @@ Le lambda expressions possono essere usate al posto di espressioni di classi ano
 # 7. Design del Sistema
 Alla base del nostro progetto c'è la volontà di permettere a più sviluppatori di rilasciare la propria avventura testuale senza dover necessariamente adattare l'intero sistema ad essa o scrivere l'intero motore da zero. Per permettere ciò è stato creato un motore di gioco che consente di caricare l'intera avventura tramite una basi di dati. Questo ha permesso di rendere quanto più generale possibile il sistema che carica, istanzia e crea tutti i componenti dell'avventura in maniera automatica dopo aver scaricato i dati da DB. Ne consegue che un ipotetico sviluppatore dovrà occuparsi solo della creazione della base di dati e della modifica del solo metodo _interpret_ della classe **Interpreter** che si occupa della gestione della logica del gioco e dei dati relativi alla base di dati (nome, username e password).
 Per consentire questo abbiamo cercato di rispettare il **riuso** (dividendo in maniera distinta tutte le componenti del sistema), la **modificabilità** (sfruttando il caricamento dell'avventura tramite basi di dati) e la **portabilità** (attraverso l'uso del linguaggio Java).
+
+# 8. OO Design
+Di seguito si riporta il diagramma delle classi: **DA FINIRE**
