@@ -1,6 +1,3 @@
-# HiddenHouse
-A java text adventure with parser
-
 # Hidden House
 
 # 1. Introduzione
