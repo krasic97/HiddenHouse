@@ -88,8 +88,11 @@ Siano:
 | -----------------    | --------------------------- |
 |                      | Room()                      |
 | setId(l,id)          | Room(l)                     |
-| getId(id1)           | if l==null then error       |
-|                      | else l                      |
+| getId(id1)           | if l==null then error <br> else l |       
+| setName(l,name)      | Room(l)                      |
+| getName(name2)       | if l==null then error <br> else l |
+| setDescription(l,descr) | Room(l)                      |
+| getDescription(l,descr1) | if l==null then error <br> else l |
 
 # 6. Concetti teorici utilizzati
 ### JDBC ###
