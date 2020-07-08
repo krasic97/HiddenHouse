@@ -76,8 +76,6 @@ Per quanto riguarda l'avanzamento nell'avventura e il responso del sistema ai va
 |                      | addObject(Object) -> List      |
 |                      | getObjects() -> List      |
 
-**DA FINIRE**
-
 Siano:
 * l = lista di Rooms
 * l2 = lista di GameObject (oggetti nella stanza)
@@ -97,6 +95,13 @@ Siano:
 | addObject(l,l2,obj)       | if l==null then error <br> else if l2==null then error <br> else Room(l,l2+obj)  |
 | getDoors(l,l3)       | if l==null then error <br> else if l3==null then error <br> else l,l2  |
 | addDoor(l,l3,door)       | if l==null then error <br> else if l3==null then error <br> else Room(l,l3+door)  |
+
+**DA FINIRE**
+
+| Specifica sintattica |                                      |
+| -------------------- | ------------------------------------ |
+| declare                 | |
+
 # 6. Concetti teorici utilizzati
 ### JDBC ###
 E’ l'acronimo di _Java Data Base Connectivity_ ed è lo standard che permette l'indipendenza delle piattaforme anche per le applicazioni che operano su basi di dati. Offre un driver manager che permette l'interrogazione delle basi di dati tramite le query. Nell'ambito del progetto, il database è stato creato ed utilizzato al fine di poter permettere l'esecuzione potenziale di più avventure sfruttando il medesimo motore di gioco. Per questo motivo al lancio del sistema vengono scaricati tutti i dati dal DB mediante una serie di query e una volta scaricati i dati e chiusa la connessione, il gioco prosegue sfruttando i dati scaricati in locale.
