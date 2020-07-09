@@ -113,4 +113,6 @@ Alla base del nostro progetto c'è la volontà di permettere a più sviluppatori
 Per consentire questo abbiamo cercato di rispettare il **riuso** (dividendo in maniera distinta tutte le componenti del sistema), la **modificabilità** (sfruttando il caricamento dell'avventura tramite basi di dati) e la **portabilità** (attraverso l'uso del linguaggio Java).
 
 # 8. OO Design
-Di seguito si riporta il diagramma delle classi: **DA FINIRE**
+Di seguito si riporta il diagramma delle classi:
+
+![classdiag](doc/HiddenHouseUML.jpg)
