@@ -93,11 +93,10 @@ Siano:
 | getDoors(l,l3)       | if l==null then error <br> else if l3==null then error <br> else l,l2  |
 | addDoor(l,l3,door)       | if l==null then error <br> else if l3==null then error <br> else Room(l,l3+door)  |
 
-**DA FINIRE**
-
-| Specifica semantica |                                      |
+| Specifica di restrizione |                                      |
 | -------------------- | ------------------------------------ |
-| declare l:List, doors:List, d:Door                 | |
+| Restriction          |                                      |
+| addDoor(Room())      | Error                                |
 
 # 6. Concetti teorici utilizzati
 ### JDBC ###
