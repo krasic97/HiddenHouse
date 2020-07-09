@@ -95,9 +95,9 @@ Siano:
 
 **DA FINIRE**
 
-| Specifica sintattica |                                      |
+| Specifica semantica |                                      |
 | -------------------- | ------------------------------------ |
-| declare                 | |
+| declare l:List, doors:List, d:Door                 | |
 
 # 6. Concetti teorici utilizzati
 ### JDBC ###
