@@ -240,7 +240,8 @@ public class Interpreter {
                 case "INVENTORY":
                     if (!g.getInventory().isEmpty()) {
                         out.println(IN_INVENTORY);
-                        g.getInventory().forEach(game_object -> printString(game_object.getAlias().get(0)));
+                        g.getInventory().forEach
+                                (game_object -> System.out.println(game_object.getAlias().get(0)));
                     }else{
                         out.println(EMPTY_INV);
                     }
@@ -456,7 +457,7 @@ public class Interpreter {
                                         }else{
                                             out.println(IN_CONTAINER);
                                             ((gameObjectContainer) g.getCurrentRoom().getObjects().get(index_objRoom)).getContainerList().forEach
-                                                    (gameObject -> printString(gameObject.getAlias().get(0)));
+                                                    (gameObject -> System.out.println(gameObject.getAlias().get(0)));
                                         }
                                     }
                                 } else if(!g.getCurrentRoom().getObjects().get(index_objRoom).isOpenable()){

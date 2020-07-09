@@ -13,7 +13,7 @@ public class Db_Manager {
 
     //Nome driver JDBC e URL di Default.database
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost/hiddenhouse";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/hiddenhouse";
 
     //Credenziali database
     private static final String USER = "root";
