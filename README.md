@@ -1,6 +1,3 @@
-# HiddenHouse
-A java text adventure with parser
-
 # Hidden House
 
 # 1. Introduzione
@@ -18,8 +15,19 @@ Le tabelle presenti nella base di dati realizzata sono le seguenti:
 
 ![tables](doc/db_tables.png)
 
+Di seguito si riportano le strutture di ogni tabella:
++ **Tabella action_alias** <br>![actionalias](doc/action_alias.png)
++ **Tabella alias_object** <br>![aliasobject](doc/alias_object.png)
++ **Tabella commands** <br>![commands](doc/commands.png)
++ **Tabella description** <br>![description](doc/description.png)
++ **Tabella doors** <br>![doors](doc/doors.png)
++ **Tabella game_logic** <br>![gamelogic](doc/game_logic.png)
++ **Tabella game_object** <br>![gameobject](doc/game_object.png)
+* **Tabella rooms** <br>![rooms](doc/rooms.png)
++ **Tabella useless_words** <br>![uslswords](doc/useless_words.png)
+
 # 4. Caratteristiche tecniche e classi realizzate
-L'idea alla base del funzionamento del motore di gioco da noi creato è il caricamento dell'intera avventura testuale tramite un database contenente:
+L'idea alla base del funzionamento del motore di gioco da noi creato è il caricamento dell'intera avventura testuale tramite il sopracitato database, contenente:
 * La logica del gioco
 * I comandi primitivi (comandi che verranno interpretati dal parser)
 * Gli oggetti del gioco
@@ -48,3 +56,61 @@ Per l'interpretazione dei comandi impartiti dall'utente in linguaggio semi-natur
 
 Per quanto riguarda l'avanzamento nell'avventura e il responso del sistema ai vari comandi impartiti dall'utente è stata definita la classe **Interpreter** che con il suo metodo **_interpret_** offre due switch. Il primo permetterà il puro avanzamento nel gioco seguendo la logica impartita dal DB, con il secondo sarà possibile eseguire tutti quei comandi comuni a più azioni di gioco.
 
+# 5. Specifiche algebriche
+**Rooms**
+| Specifica sintattica |                                      |
+| -------------------- | ------------------------------------ |
+| Tipi:                | Room, short, String, String, List, List, Object, Object         |
+| Operatori:           | Room()-> Room |
+|                      | setIid(short) -> short          |
+|                      | getId() -> short         |
+|                      | setName(String) -> String      |
+|                      | getName() -> String      |
+|                      | setDescription(String) -> String      |
+|                      | getDescription() -> String      |
+|                      | addDoor(Object) -> List      |
+|                      | getDoors() -> List      |
+|                      | addObject(Object) -> List      |
+|                      | getObjects() -> List      |
+
+Siano:
+* l = lista di Rooms
+* l2 = lista di GameObject (oggetti nella stanza)
+* l3 = lista di Door (porte nella stanza)
+* id = identificativo di Room (stanza corrente)
+
+| Osservazioni         | Costruttori di Rooms        |
+| -----------------    | --------------------------- |
+|                      | Room()                      |
+| setId(l,id)          | Room(l)                     |
+| getId(id1)           | if l==null then error <br> else l |       
+| setName(l,name)      | Room(l)                      |
+| getName(name2)       | if l==null then error <br> else l |
+| setDescription(l,descr) | Room(l)                      |
+| getDescription(l,descr1) | if l==null then error <br> else l |
+| getObjects(l,l2)       | if l==null then error <br> else if l2==null then error <br> else l,l2  |
+| addObject(l,l2,obj)       | if l==null then error <br> else if l2==null then error <br> else Room(l,l2+obj)  |
+| getDoors(l,l3)       | if l==null then error <br> else if l3==null then error <br> else l,l2  |
+| addDoor(l,l3,door)       | if l==null then error <br> else if l3==null then error <br> else Room(l,l3+door)  |
+
+| Specifica di restrizione |                                      |
+| -------------------- | ------------------------------------ |
+| Restriction          |                                      |
+| addDoor(Room())      | Error                                |
+
+# 6. Concetti teorici utilizzati
+### JDBC ###
+E’ l'acronimo di _Java Data Base Connectivity_ ed è lo standard che permette l'indipendenza delle piattaforme anche per le applicazioni che operano su basi di dati. Offre un driver manager che permette l'interrogazione delle basi di dati tramite le query. Nell'ambito del progetto, il database è stato creato ed utilizzato al fine di poter permettere l'esecuzione potenziale di più avventure sfruttando il medesimo motore di gioco. Per questo motivo al lancio del sistema vengono scaricati tutti i dati dal DB mediante una serie di query e una volta scaricati i dati e chiusa la connessione, il gioco prosegue sfruttando i dati scaricati in locale.
+
+### RTTI ###
+Sta per _Run-Time Type Identification_ e permette appunto l'identificazione di tipo a runtime. Abbiamo fatto uso della RTTI attraverso la parola chiave _instanceof_ che ci è stata utile in tutte quelle situazioni in cui data una stanza con oggetti di tipo **GameObject** e **gameObjectContainer**, si rendeva necessario applicare comportamenti e operazioni diverse sulla base del fatto che l'istanza corrente specificata dal giocatore fosse un oggetto di gioco o un contenitore di oggetti di gioco.
+
+### Lamba Expressions ###
+Le lambda expressions possono essere usate al posto di espressioni di classi anonime, permettono di sfruttare la programmazione funzionale e sono utili quando si rende necessario l'uso di un metodo che verrà utilizzata una sola volta. Così facendo è possibile risparmiarsi l'effettiva definizione e dichiarazione di un metodo che verrà usato una sola volta creando invece una funzione anonima. Abbiamo fatto uso delle espressioni lambda nel file **Interpreter.java** in sostituzione del costrutto _foreach_ poichè nel caso specifico l'uso del foreach non funzionava in maniera corretta con il tipo di dato passato.
+
+# 7. Design del Sistema
+Alla base del nostro progetto c'è la volontà di permettere a più sviluppatori di rilasciare la propria avventura testuale senza dover necessariamente adattare l'intero sistema ad essa o scrivere l'intero motore da zero. Per permettere ciò è stato creato un motore di gioco che consente di caricare l'intera avventura tramite una basi di dati. Questo ha permesso di rendere quanto più generale possibile il sistema che carica, istanzia e crea tutti i componenti dell'avventura in maniera automatica dopo aver scaricato i dati da DB. Ne consegue che un ipotetico sviluppatore dovrà occuparsi solo della creazione della base di dati e della modifica del solo metodo _interpret_ della classe **Interpreter** che si occupa della gestione della logica del gioco e dei dati relativi alla base di dati (nome, username e password).
+Per consentire questo abbiamo cercato di rispettare il **riuso** (dividendo in maniera distinta tutte le componenti del sistema), la **modificabilità** (sfruttando il caricamento dell'avventura tramite basi di dati) e la **portabilità** (attraverso l'uso del linguaggio Java).
+
+# 8. OO Design
+Di seguito si riporta il diagramma delle classi: **DA FINIRE**
