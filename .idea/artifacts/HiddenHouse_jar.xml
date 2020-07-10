@@ -3,11 +3,15 @@
     <output-path>$PROJECT_DIR$/out/artifacts/HiddenHouse_jar</output-path>
     <root id="archive" name="HiddenHouse.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/main/j/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="HiddenHouse" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/8.0.19/mysql-connector-java-8.0.19.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/mysql-connector-java-8.0.19.jar" path-in-jar="/" />
-      <element id="dir-copy" path="$PROJECT_DIR$/src/main/j/META-INF" />
+      <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.19" />
+      <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
+      <element id="file-copy" path="$PROJECT_DIR$/mysql-connector-java-8.0.19.jar" />
     </root>
   </artifact>
 </component>
