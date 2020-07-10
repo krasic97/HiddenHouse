@@ -2,6 +2,7 @@
 
 # 1. Introduzione
 Nell'ambito del corso di studi di **Metodi Avanzati di Programmazione** è stato realizzato un motore di gioco per avventure testuali, facendo uso del linguaggio **Java** e del tool **Maven** per l'automazione del progetto.
+L'avventura testuale che abbiamo creato trae ispirazione da un famoso gioco per PlayStation2 chiamato Project Zero. Il gioco tratta di fantasmi, esorcismi ed oscuri rituali shintoisti. A tal proposito abbiamo ispirato l'ambientazione del gioco alle ville presenti in Project Zero cercando di riportare le medesime ambientazioni buie e claustrofobiche.
 
 # 2. Requisiti progettuali
 Il sistema progettato deve soddisfare le seguenti specifiche:
