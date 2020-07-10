@@ -1,7 +1,18 @@
 # Hidden House
-
+# Sommario
+ 1. Introduzione
+ 2. Requisiti progettuali
+ 3. Descrizione della base di dati
+ 4. Caratteristiche tecniche e classi realizzate
+ 5. Specifiche algebriche
+ 6. Concetti teorici utilizzati
+ 7. Design del Sistema
+ 8. OO Design
+ 9. Manuale Utente
+ 
 # 1. Introduzione
 Nell'ambito del corso di studi di **Metodi Avanzati di Programmazione** è stato realizzato un motore di gioco per avventure testuali, facendo uso del linguaggio **Java** e del tool **Maven** per l'automazione del progetto.
+
 L'avventura testuale che abbiamo creato trae ispirazione da un famoso gioco per PlayStation2 chiamato Project Zero. Il gioco tratta di fantasmi, esorcismi ed oscuri rituali shintoisti. A tal proposito abbiamo ispirato l'ambientazione del gioco alle ville presenti in Project Zero cercando di riportare le medesime ambientazioni buie e claustrofobiche.
 
 # 2. Requisiti progettuali
@@ -117,3 +128,47 @@ Per consentire questo abbiamo cercato di rispettare il **riuso** (dividendo in m
 Di seguito si riporta il diagramma delle classi:
 
 ![classdiag](doc/HiddenHouseUML.jpg)
+
+# 9. Manuale Utente
+
+Di seguito riportiamo i passi per una corretta installazione di MySql 5.7, configurazione e import
+del Db necessario per l'avvio dell'avventura testuale.
+
+WINDOWS
+---------------------
+**1.** Scaricare e installare MySql 5.7 Server dal sito ufficiale<br>
+**2.** Configurare nome utente e passowrd (ad esempio. lasciare come nome utente 'root' e come password '1234')<br>
+**3.** Aprire MySql server e digitare la password impostata precedentemente<br> 
+- Creare un nuovo db chiamato hiddenhouse (_CREATE DATABASE hiddenhouse;_)<br>
+- Chiudere MySql<br>
+
+**4.** Posizionarsi nella cartella "C:\Program Files\MySQL\MySQL Server 5.7\bin" (cercare il percorso corretto poichè questo è solo un esempio) e da qui aprire il prompt dei comandi di Windows<br>
+**5.**  Digitare _mysql -h 127.0.0.1 -u root -p hiddenhouse>"dgitare qui il percorso del database seguito da hiddenhouse.sql"_<br>
+- Digitare infine la password impostata precedentemente<br>
+
+**6.** Nel codice sostituire la password di MySql nella classe DbManager nella variabile PASS<br>
+**7.** L'avventura è pronta per essere avviata e giocata!<br>
+
+UBUNTU
+---------------------
+**1.** Installare MySql Server 5.7 con i comandi:<br> 
+- _sudo apt update_<br>
+- _sudo apt install mysql-server_<br>
+- _sudo mysql_secure_installation_ (Configurare nome utente e passowrd lasciando come nome utente 'root' e come password '1234')<br>
+
+**2.** Dopo l'installazione avviare MySql con il comando _sudo mysql_ e nel prompt di MySql digitare<br> 
+- _ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';_ (al posto di password inserire la password settata al momento dell'installazione)<br>
+- _FLUSH PRIVILEGES;_ (per applicare i cambiamenti effettuati)<br>
+
+**3.** Una volta chiuso MySql per rientrare nel prompt sarà necessario digitare _mysql -u root -p_<br>
+**4.** Creare un nuovo db con questo comando _CREATE DATABASE hiddenhouse;_<br>
+**5.** Dalla shell di Unix digitare _mysql hiddenhouse < percorso/al/file/hiddenhouse.sql_<br>
+**6.** L'avventura è pronta per essere avviata e giocata.<br>
+
+**NOTA IMPORTANTE PER TUTTI I SISTEMI OPERATIVI:**
+Durante la compilazione del progetto, il drivere JDBC potrebbe sollevare un'eccezione e non riconoscere il time_zone, per ovviare a questo problema aprire MySql e digitare
+- _SET GLOBAL time_zone = '+1:00';_
+
+Poichè il gioco fa uso di caratteri ANSI, al fine di consentire la loro corretta visualizzazione si riportano due soluzioni rispettivamente per Ubuntu e per Windows:
+* **Ubuntu**: Per abilitare la corretta visualizzazione dei caratteri ANSI su Linux si consiglia di eseguire il seguente comando nel terminale di Linux **_export LESS="-eRiMX"_** e successivamente avviare il file Hiddenhouse.jar con il comando **java -jar percorso/al/file/Hiddenhouse.jar**
+* **Windows**: Per consentire la corretta visualizzazione dei caratteri ANSI su Windows si consiglia di avviare il file Hiddenhouse.jar con il comando **java -jar percorso/al/file/Hiddenhouse.jar** nel terminale **"Windows Terminal"**.
